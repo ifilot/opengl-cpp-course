@@ -55,12 +55,57 @@ static const struct
 };
 
 /*
+ * Vertex shader program
+ */
+static const char* vertex_shader_text =
+"uniform mat4 MVP;\n"
+"attribute vec3 vCol;\n"
+"attribute vec2 vPos;\n"
+"varying vec3 color;\n"
+"void main()\n"
+"{\n"
+"    gl_Position = MVP * vec4(vPos, 0.0, 1.0);\n"
+"    color = vCol;\n"
+"}\n";
+
+/*
+ * fragment shader program
+ */
+static const char* fragment_shader_text =
+"varying vec3 color;\n"
+"void main()\n"
+"{\n"
+"    gl_FragColor = vec4(color, 1.0);\n"
+"}\n";
+
+static void check_shader_error(GLuint shader, GLuint flag, bool is_program, const std::string& error_message) {
+    GLint success = 0;
+    GLchar error[1024] = { 0 };
+
+    if(is_program) {
+        glGetProgramiv(shader, flag, &success);
+    } else {
+        glGetShaderiv(shader, flag, &success);
+    }
+
+    if(success == GL_FALSE) {
+        if(is_program) {
+            glGetProgramInfoLog(shader, sizeof(error), NULL, error);
+        } else {
+            glGetShaderInfoLog(shader, sizeof(error), NULL, error);
+        }
+
+        std::cerr << error_message << ": '" << error << "'" << std::endl;
+    }
+}
+
+/*
  * WinMain enables us to launch a Windows application that immediately returns to the prompt
  */
 int main() {
     std::cout << "Start program" << std::endl;
 
-	// create pointer to new window
+    // create pointer to new window
     GLFWwindow* window;
 
     // set error callback function
@@ -71,13 +116,13 @@ int main() {
         std::cerr << "Could not initialize glfw, exiting..." << std::endl;
         exit(EXIT_FAILURE);
     }
-        
+
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 2);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 0);
-    
+
     // create a new window
     window = glfwCreateWindow(640, 480, "Simple example", NULL, NULL);
-    
+
     // check if the window was succesfully created
     if (!window) {
         std::cerr << "Could not build window, exiting..." << std::endl;
@@ -110,13 +155,13 @@ int main() {
     glGenBuffers(1, &vertex_buffer);
     glBindBuffer(GL_ARRAY_BUFFER, vertex_buffer);
     glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
-    
+
     // load vertex shader
     vertex_shader = glCreateShader(GL_VERTEX_SHADER);
     glShaderSource(vertex_shader, 1, &vertex_shader_text, NULL);
     glCompileShader(vertex_shader);
     check_shader_error(vertex_shader, GL_COMPILE_STATUS, false, "Error: Shader compilation failed: ");
-    
+
     // load fragment shader
     fragment_shader = glCreateShader(GL_FRAGMENT_SHADER);
     glShaderSource(fragment_shader, 1, &fragment_shader_text, NULL);
@@ -142,7 +187,7 @@ int main() {
 
     // start loop
     while (!glfwWindowShouldClose(window)) {
-    	// get width window width and height
+        // get width window width and height
         int width = 640;
         int height = 480;
         float ratio = width / (float) height;

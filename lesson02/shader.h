@@ -13,6 +13,8 @@
 #define _SHADER_H
 
 #include <string>
+#include <iostream>
+#include <fstream>
 #ifdef WIN32
     #pragma comment (lib, "glew32s.lib")
     #define GLEW_STATIC
@@ -21,12 +23,32 @@
 
 class Shader {
 private:
+	GLuint program;
+	GLuint shaders[2];
 
 public:
 	Shader(const std::string& path);
 
+    inline void link() {
+        glLinkProgram(this->program);
+    }
+
+    inline void use() {
+        glUseProgram(this->program);
+    }
+
+    inline GLuint get_id() const {
+        return this->program;
+    }
+
 private:
 	void check_shader_error(GLuint shader, GLuint flag, bool is_program, const std::string& error_message);
+
+    void load_shader(const std::string& path, GLenum shader_type);
+
+    void create_program();
+
+    std::string load_shader_code(const std::string& path);
 };
 
 #endif // _SHADER_H
