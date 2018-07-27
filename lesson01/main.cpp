@@ -55,51 +55,6 @@ static const struct
 };
 
 /*
- * Vertex shader program
- */
-static const char* vertex_shader_text =
-"uniform mat4 MVP;\n"
-"attribute vec3 vCol;\n"
-"attribute vec2 vPos;\n"
-"varying vec3 color;\n"
-"void main()\n"
-"{\n"
-"    gl_Position = MVP * vec4(vPos, 0.0, 1.0);\n"
-"    color = vCol;\n"
-"}\n";
-
-/*
- * fragment shader program
- */
-static const char* fragment_shader_text =
-"varying vec3 color;\n"
-"void main()\n"
-"{\n"
-"    gl_FragColor = vec4(color, 1.0);\n"
-"}\n";
-
-static void check_shader_error(GLuint shader, GLuint flag, bool is_program, const std::string& error_message) {
-    GLint success = 0;
-    GLchar error[1024] = { 0 };
-
-    if(is_program) {
-        glGetProgramiv(shader, flag, &success);
-    } else {
-        glGetShaderiv(shader, flag, &success);
-    }
-
-    if(success == GL_FALSE) {
-        if(is_program) {
-            glGetProgramInfoLog(shader, sizeof(error), NULL, error);
-        } else {
-            glGetShaderInfoLog(shader, sizeof(error), NULL, error);
-        }
-
-        std::cerr << error_message << ": '" << error << "'" << std::endl;
-    }
-}
-
-/*
  * WinMain enables us to launch a Windows application that immediately returns to the prompt
  */
 int main() {
