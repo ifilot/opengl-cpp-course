@@ -43,9 +43,9 @@ static void key_callback(GLFWwindow* window, int key, int scancode, int action, 
 /*
  * vertices and colors
  */
-static const float vertices[6] = {-0.6f, -0.4f, 0.6f, -0.4f, 0.f,  0.6f};
-static const float colors[9] = {1.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 1.0f};
-static const unsigned int indices[3] = {0,1,2};
+static const float vertices[8] = {-0.6f, -0.4f, 0.6f, -0.4f, 0.6,  0.4f, -0.6, 0.4};
+static const float colors[12] = {1.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f, 0.0f};
+static const unsigned int indices[6] = {0,1,2,0,2,3};
 
 /*
  * Vertex shader program
@@ -156,19 +156,19 @@ int main() {
 
     // bind vertices
     glBindBuffer(GL_ARRAY_BUFFER, vbo[0]);
-    glBufferData(GL_ARRAY_BUFFER, 6 * sizeof(float) * 3, &vertices[0], GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, 8 * sizeof(float) * 3, &vertices[0], GL_STATIC_DRAW);
     glEnableVertexAttribArray(0);
     glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 0, 0);
 
     // bind colors
     glBindBuffer(GL_ARRAY_BUFFER, vbo[1]);
-    glBufferData(GL_ARRAY_BUFFER, 9 * sizeof(float) * 3, &colors[0], GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, 12 * sizeof(float) * 3, &colors[0], GL_STATIC_DRAW);
     glEnableVertexAttribArray(1);
     glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, 0);
 
     // bind indices
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, vbo[2]);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, 3 * sizeof(unsigned int), &indices[0], GL_STATIC_DRAW);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, 6 * sizeof(unsigned int), &indices[0], GL_STATIC_DRAW);
     glBindVertexArray(0);
 
     // load vertex shader
@@ -221,7 +221,7 @@ int main() {
         glUniformMatrix4fv(mvp_location, 1, GL_FALSE, &mvp[0][0]);
 
         glBindVertexArray(vao);
-        glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_INT, 0);
+        glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 
         // swap buffers
         glfwSwapBuffers(window);
