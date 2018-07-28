@@ -43,39 +43,35 @@ static void key_callback(GLFWwindow* window, int key, int scancode, int action, 
 /*
  * vertices and colors
  */
-static const struct
-{
-    float x, y;
-    float r, g, b;
-} vertices[3] =
-{
-    { -0.6f, -0.4f, 1.f, 0.f, 0.f },
-    {  0.6f, -0.4f, 0.f, 1.f, 0.f },
-    {   0.f,  0.6f, 0.f, 0.f, 1.f }
-};
+static const float vertices[6] = {-0.6f, -0.4f, 0.6f, -0.4f, 0.f,  0.6f};
+static const float colors[9] = {1.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 1.0f};
+static const unsigned int indices[3] = {0,1,2};
 
 /*
  * Vertex shader program
  */
 static const char* vertex_shader_text =
-"uniform mat4 MVP;\n"
-"attribute vec3 vCol;\n"
-"attribute vec2 vPos;\n"
-"varying vec3 color;\n"
+"#version 330 core\n"
+"uniform mat4 mvp;\n"
+"in vec3 col;\n"
+"in vec2 pos;\n"
+"out vec3 color;\n"
 "void main()\n"
 "{\n"
-"    gl_Position = MVP * vec4(vPos, 0.0, 1.0);\n"
-"    color = vCol;\n"
+"    gl_Position = mvp * vec4(pos, 0.0, 1.0);\n"
+"    color = col;\n"
 "}\n";
 
 /*
  * fragment shader program
  */
 static const char* fragment_shader_text =
-"varying vec3 color;\n"
+"#version 330 core\n"
+"in vec3 color;\n"
+"out vec4 outcol;\n"
 "void main()\n"
 "{\n"
-"    gl_FragColor = vec4(color, 1.0);\n"
+"    outcol = vec4(color, 1.0);\n"
 "}\n";
 
 static void check_shader_error(GLuint shader, GLuint flag, bool is_program, const std::string& error_message) {
@@ -117,8 +113,10 @@ int main() {
         exit(EXIT_FAILURE);
     }
 
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 2);
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 0);
+    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+    glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
 
     // create a new window
     window = glfwCreateWindow(640, 480, "Simple example", NULL, NULL);
@@ -148,13 +146,30 @@ int main() {
     glfwSwapInterval(1);
 
     // declare variables
-    GLuint vertex_buffer, vertex_shader, fragment_shader, program;
+    GLuint vao, vbo[3], vertex_shader, fragment_shader, program;
     GLint mvp_location, vpos_location, vcol_location;
 
     // load shape into buffer
-    glGenBuffers(1, &vertex_buffer);
-    glBindBuffer(GL_ARRAY_BUFFER, vertex_buffer);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+    glGenVertexArrays(1, &vao);
+    glBindVertexArray(vao);
+    glGenBuffers(3, vbo);
+
+    // bind vertices
+    glBindBuffer(GL_ARRAY_BUFFER, vbo[0]);
+    glBufferData(GL_ARRAY_BUFFER, 6 * sizeof(float) * 3, &vertices[0], GL_STATIC_DRAW);
+    glEnableVertexAttribArray(0);
+    glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 0, 0);
+
+    // bind colors
+    glBindBuffer(GL_ARRAY_BUFFER, vbo[1]);
+    glBufferData(GL_ARRAY_BUFFER, 9 * sizeof(float) * 3, &colors[0], GL_STATIC_DRAW);
+    glEnableVertexAttribArray(1);
+    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, 0);
+
+    // bind indices
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, vbo[2]);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, 3 * sizeof(unsigned int), &indices[0], GL_STATIC_DRAW);
+    glBindVertexArray(0);
 
     // load vertex shader
     vertex_shader = glCreateShader(GL_VERTEX_SHADER);
@@ -173,17 +188,14 @@ int main() {
     glAttachShader(program, vertex_shader);
     glAttachShader(program, fragment_shader);
     glLinkProgram(program);
+    check_shader_error(program, GL_LINK_STATUS, true, "Program linking failed: ");
+    glValidateProgram(program);
+    check_shader_error(program, GL_VALIDATE_STATUS, true, "Program validation failed: ");
 
     // set uniform variables in shader
-    mvp_location = glGetUniformLocation(program, "MVP");
-    vpos_location = glGetAttribLocation(program, "vPos");
-    vcol_location = glGetAttribLocation(program, "vCol");
-
-    // set attribute arrays
-    glEnableVertexAttribArray(vpos_location);
-    glVertexAttribPointer(vpos_location, 2, GL_FLOAT, GL_FALSE, sizeof(float) * 5, (void*) 0);
-    glEnableVertexAttribArray(vcol_location);
-    glVertexAttribPointer(vcol_location, 3, GL_FLOAT, GL_FALSE, sizeof(float) * 5, (void*) (sizeof(float) * 2));
+    mvp_location = glGetUniformLocation(program, "mvp");
+    glBindAttribLocation(program, 0, "pos");
+    glBindAttribLocation(program, 1, "col");
 
     // start loop
     while (!glfwWindowShouldClose(window)) {
@@ -207,7 +219,9 @@ int main() {
         glm::mat4 mvp = projection * view * model;
         glUseProgram(program);
         glUniformMatrix4fv(mvp_location, 1, GL_FALSE, &mvp[0][0]);
-        glDrawArrays(GL_TRIANGLES, 0, 3);
+
+        glBindVertexArray(vao);
+        glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_INT, 0);
 
         // swap buffers
         glfwSwapBuffers(window);

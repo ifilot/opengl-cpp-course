@@ -45,16 +45,9 @@ static void key_callback(GLFWwindow* window, int key, int scancode, int action, 
 /*
  * vertices and colors
  */
-static const struct
-{
-    float x, y;
-    float r, g, b;
-} vertices[3] =
-{
-    { -0.6f, -0.4f, 1.f, 0.f, 0.f },
-    {  0.6f, -0.4f, 0.f, 1.f, 0.f },
-    {   0.f,  0.6f, 0.f, 0.f, 1.f }
-};
+static const float vertices[6] = {-0.6f, -0.4f, 0.6f, -0.4f, 0.f,  0.6f};
+static const float colors[9] = {1.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 1.0f};
+static const unsigned int indices[3] = {0,1,2};
 
 /*
  * WinMain enables us to launch a Windows application that immediately returns to the prompt
@@ -105,28 +98,39 @@ int main() {
     glfwSwapInterval(1);
 
     // declare variables
-    GLuint vertex_buffer;
-    GLint mvp_location, vpos_location, vcol_location;
+    GLuint vao, vbo[3];
 
     // build Shader
     Shader shader("simple");
     glLinkProgram(shader.get_id());
 
-    // set uniform variables in shader
-    mvp_location = glGetUniformLocation(shader.get_id(), "MVP");
-    vpos_location = glGetAttribLocation(shader.get_id(), "vPos");
-    vcol_location = glGetAttribLocation(shader.get_id(), "vCol");
-
     // load shape into buffer
-    glGenBuffers(1, &vertex_buffer);
-    glBindBuffer(GL_ARRAY_BUFFER, vertex_buffer);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+    glGenVertexArrays(1, &vao);
+    glBindVertexArray(vao);
+    glGenBuffers(3, vbo);
 
-    // set attribute arrays
-    glVertexAttribPointer(vpos_location, 2, GL_FLOAT, GL_FALSE, sizeof(float) * 5, (void*) 0);
-    glEnableVertexAttribArray(vpos_location);
-    glVertexAttribPointer(vcol_location, 3, GL_FLOAT, GL_FALSE, sizeof(float) * 5, (void*) (sizeof(float) * 2));
-    glEnableVertexAttribArray(vcol_location);
+    // bind vertices
+    glBindBuffer(GL_ARRAY_BUFFER, vbo[0]);
+    glBufferData(GL_ARRAY_BUFFER, 6 * sizeof(float) * 3, &vertices[0], GL_STATIC_DRAW);
+    glEnableVertexAttribArray(0);
+    glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 0, 0);
+
+    // bind colors
+    glBindBuffer(GL_ARRAY_BUFFER, vbo[1]);
+    glBufferData(GL_ARRAY_BUFFER, 9 * sizeof(float) * 3, &colors[0], GL_STATIC_DRAW);
+    glEnableVertexAttribArray(1);
+    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, 0);
+
+    // bind indices
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, vbo[2]);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, 3 * sizeof(unsigned int), &indices[0], GL_STATIC_DRAW);
+    glBindVertexArray(0);
+
+    // set uniform variables in shader
+    GLuint program = shader.get_id();
+    GLint mvp_location = glGetUniformLocation(program, "mvp");
+    glBindAttribLocation(program, 0, "pos");
+    glBindAttribLocation(program, 1, "col");
 
     // start loop
     while (!glfwWindowShouldClose(window)) {
@@ -150,7 +154,9 @@ int main() {
         glm::mat4 mvp = projection * view * model;
         shader.use();
         glUniformMatrix4fv(mvp_location, 1, GL_FALSE, &mvp[0][0]);
-        glDrawArrays(GL_TRIANGLES, 0, 3);
+
+        glBindVertexArray(vao);
+        glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_INT, 0);
 
         // swap buffers
         glfwSwapBuffers(window);
