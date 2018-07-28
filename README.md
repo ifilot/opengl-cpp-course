@@ -31,3 +31,4 @@ nmake
 
 ## Lesson overview
 1. [Compiling and running an OpenGL program](lesson01/README.md)
+2. [Creating a Shader class](lesson02/README.md)
