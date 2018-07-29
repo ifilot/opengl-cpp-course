@@ -1,8 +1,7 @@
-# Lesson 02 : Creating a Shader class
+# Lesson 02 : Model, View, Perspective
 
 ## Learning goals
-* Understand the components (uniforms and attributes) of an OpenGL Shader
-* How to compartimentalize the Shader routines in a class
+
 
 ## Compilation instructions
 ```
@@ -16,5 +15,3 @@ nmake
 ```
 occ-lesson-02
 ```
-
-![Colored triangle](images/lesson02_result.jpg "Lesson 02 - Colored triangle")

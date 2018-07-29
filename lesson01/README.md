@@ -142,6 +142,6 @@ Make the triangle a pure red color. You can do this in two ways, either by chang
 ### Exercise 03: Make a square
 You can build a square as a combination of two triangles. Adjust the positions, colors, and indices in such a way that they contain two triangles. Note that these two triangles share two vertices, such that there are in total only 4 distinct vertices. Can you make clever use of the indices array such that the vertices and colors array only need 8 and 12 values, respectively?
 
-## Further reading
+## Further reading and tips
 * A very good tutorial (with significant overlap with this lesson) is provided [here](http://www.opengl-tutorial.org/beginners-tutorials/tutorial-2-the-first-triangle/).
 * More information about each of the OpenGL functions can be found at the [OpenGL references pages](https://www.khronos.org/registry/OpenGL-Refpages/gl4/html/), although if you Google any single function the first entry is probably one of the pages in this source.

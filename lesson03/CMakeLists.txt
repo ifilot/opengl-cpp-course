@@ -1,6 +1,6 @@
 # set minimum cmake requirements
 cmake_minimum_required(VERSION 2.8)
-project (occ-lesson02)
+project (occ-lesson03)
 
 # add custom directory to look for .cmake files
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_SOURCE_DIR}/cmake/modules )
@@ -41,10 +41,10 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}
 
 # Add sources
 file(GLOB_RECURSE SOURCES "*.cpp")
-add_executable(occ-lesson02 ${SOURCES})
+add_executable(occ-lesson03 ${SOURCES})
 
 # Link libraries
-target_link_libraries(occ-lesson02
+target_link_libraries(occ-lesson03
     ${GLFW3_LIBRARY}
     ${OPENGL_glu_LIBRARY}
     ${OPENGL_gl_LIBRARY}
@@ -60,4 +60,4 @@ set(CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS}")
 ###
 # Installing
 ##
-install (TARGETS occ-lesson02 DESTINATION bin)
+install (TARGETS occ-lesson03 DESTINATION bin)

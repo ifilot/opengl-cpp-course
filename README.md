@@ -1,11 +1,12 @@
 # GLFW Helloworld Windows
 
 ## Purpose and expectations
-This repository contains the source code for the OpenGL C++ course. The course teaches students how to effectively use C++ to build programs using OpenGL. This course is aimed for university level students working in natural science and technology who do not have such a specific course in their curriculum (students of computer science or electrical engineering probably have a much more in-depth course). The course is made in a concise manner and we refer often to external resources which we expect the student to read (or at least glance through).
+This repository contains the source code for the OpenGL C++ course. The course teaches students how to effectively use C++ in conjunction with OpenGL to build graphical programs. The course is made in a concise manner and we refer often to external resources which we expect the student to read (or at least glance through). The learning strategy employed here is "Learning by example" and "Learning by doing". This means that example code is provided and the student is given the opportunity to practice with the material in the form of exercises.
 
 ## Lesson overview
 1. [Compiling and running an OpenGL program](lesson01/README.md)
-2. [Creating a Shader class](lesson02/README.md)
+2. [Model, View, Perspective](lesson02/README.md)
+3. [Creating a Shader class](lesson03/README.md)
 
 ## Prerequisite software
 * [CMake](https://cmake.org/download/)
