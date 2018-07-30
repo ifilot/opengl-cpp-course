@@ -95,3 +95,37 @@ glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 ```
 
 Note that we only added a single vertex and corresponding color to the arrays and used the indices array to "recycle" two points.
+
+## Exercise 04:
+
+Change the vertex arrays to:
+```
+static const float vertices[12] = {1.0f, 0.0f, -1.0f/std::sqrt(2.0f), -1.0f, 0.0f, -1.0f/std::sqrt(2.0f), 0.0f, 1.0f, 1.0f/std::sqrt(2.0f), 0.0f, -1.0f, 1.0f/std::sqrt(2.0f)};
+static const float colors[12] = {1.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f, 0.0f};
+static const unsigned int indices[12] = {1,3,2,0,2,3,0,1,3,0,2,1};
+```
+
+The bind command becomes:
+```
+glBufferData(GL_ARRAY_BUFFER, 12 * sizeof(float), &vertices[0], GL_STATIC_DRAW);
+```
+
+and
+
+```
+glBufferData(GL_ARRAY_BUFFER, 12 * sizeof(float), &colors[0], GL_STATIC_DRAW);
+```
+
+and the draw command is changed to
+```
+glDrawElements(GL_TRIANGLES, 12, GL_UNSIGNED_INT, 0);
+```
+
+You will see that there is some weird overlapping of the triangles. This is because a triangle that is closer to the camera (lower z-value), is not necessarily drawn on top of a triangle that is further away from the camera (larger z-value). This is termed [z-fighting](https://en.wikipedia.org/wiki/Z-fighting).
+
+You can fix this by setting the following two lines
+
+```
+glEnable(GL_DEPTH_TEST);
+glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+```

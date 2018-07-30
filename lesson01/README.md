@@ -133,6 +133,8 @@ A shader is created using `glCreateShader`, which takes a single argument specif
 
 ## Exercises
 
+Solution to these exercises are given [here](solutions.md)
+
 ### Exercise 01: Changing c-style arrays to std::vector
 On lines 46-49 of `main.cpp`, c-style vectors are being used. Change these to `std::vector`. What is the advantage of doing so? What else do you need to change in the script to let everything work accordingly? See lines 157-172.
 
@@ -141,6 +143,11 @@ Make the triangle a pure red color. You can do this in two ways, either by chang
 
 ### Exercise 03: Make a square
 You can build a square as a combination of two triangles. Adjust the positions, colors, and indices in such a way that they contain two triangles. Note that these two triangles share two vertices, such that there are in total only 4 distinct vertices. Can you make clever use of the indices array such that the vertices and colors array only need 8 and 12 values, respectively?
+
+### Exercise 04: Make a tetrahedron
+Build a tetrahedron by defining four vertices and connect these as four triangles. Consult [this wiki page](https://en.wikipedia.org/wiki/Tetrahedron#Formulas_for_a_regular_tetrahedron) for the coordinates of the vertices of a tetrahedron. You need to expand your vertices array to also hold z-values, change the line that reads in the vertex positions in the VBO and the vertex shader program. Your results will look something like the image below. What goes wrong with this rendering and can you guess why that is? (think about overlapping triangles)
+
+![Tetrahedron rendering](images/lesson01_tetrahedron.jpg "Lesson 01 - Tetrahedron rendering")
 
 ## Further reading and tips
 * A very good tutorial (with significant overlap with this lesson) is provided [here](http://www.opengl-tutorial.org/beginners-tutorials/tutorial-2-the-first-triangle/).
