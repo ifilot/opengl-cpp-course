@@ -242,14 +242,16 @@ int main() {
         glClearColor(0.0f, 0.0f, 0.0f, 1.0f); // black background
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-        // add draw calls
+        // construct mvp matrix
         glm::mat4 scale = glm::scale(glm::vec3(1.0f, 1.0f, 1.0f));
         glm::mat4 rotate = glm::rotate((float) glfwGetTime(), glm::vec3(1.0f, 1.0f, 1.0f));
-        glm::mat4 translate = glm::translate(glm::vec3(0.2f, 0.0f, 0.0f));
+        glm::mat4 translate = glm::translate(glm::vec3(0.0f, 0.0f, 0.0f));
         glm::mat4 model = translate * rotate * scale;
         glm::mat4 view = glm::lookAt(glm::vec3(0.0f, 0.0f, 2.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
         glm::mat4 projection = glm::perspective(45.0f, ratio, 0.01f, 10.0f);
         glm::mat4 mvp = projection * view * model;
+
+        // load program and copy mvp matrix
         glUseProgram(program);
         glUniformMatrix4fv(mvp_location, 1, GL_FALSE, &mvp[0][0]);
 
