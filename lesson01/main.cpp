@@ -218,7 +218,7 @@ int main() {
         glClearColor(0.0f, 0.0f, 0.0f, 1.0f); // black background
         glClear(GL_COLOR_BUFFER_BIT);
 
-        // add draw calls
+        // construct mvp matrix
         glm::mat4 model = glm::rotate((float) glfwGetTime(), glm::vec3(0.0f, 1.0f, 0.0f));
         glm::mat4 view = glm::lookAt(glm::vec3(0.0f, 0.0f, 1.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
         glm::mat4 projection = glm::ortho(-ratio, ratio, -1.0f, 1.0f, 0.01f, 10.0f);
@@ -226,6 +226,7 @@ int main() {
         glUseProgram(program);
         glUniformMatrix4fv(mvp_location, 1, GL_FALSE, &mvp[0][0]);
 
+        // load vao and execute draw call
         glBindVertexArray(vao);
         glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_INT, 0);
 
