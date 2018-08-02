@@ -41,11 +41,33 @@ static void key_callback(GLFWwindow* window, int key, int scancode, int action, 
 }
 
 /*
- * vertices and colors
+ * define cube object
  */
-static const float vertices[6] = {-0.6f, -0.4f, 0.6f, -0.4f, 0.0f, 0.6f};
-static const float colors[9] = {1.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 1.0f};
-static const unsigned int indices[3] = {0,1,2};
+static const float vertices[72] = 
+{
+    -0.5f, -0.5f, 0.5f, 0.5f, -0.5f, 0.5f, 0.5f, -0.5f, -0.5f, -0.5f, -0.5f, -0.5f, // bottom
+    -0.5f, -0.5f, 0.5f, 0.5f, -0.5f, 0.5f, 0.5f, 0.5f, 0.5f, -0.5f, 0.5f, 0.5f,     // front
+    0.5f, -0.5f, 0.5f, 0.5f, -0.5f, -0.5f, 0.5f, 0.5f, -0.5f, 0.5f, 0.5f, 0.5f,     // right
+    0.5f, -0.5f, -0.5f, -0.5f, -0.5f, -0.5f, -0.5f, 0.5f, -0.5f, 0.5f, 0.5f, -0.5f, // back
+    -0.5f, -0.5f, -0.5f, -0.5f, -0.5f, 0.5f, -0.5f, 0.5f, 0.5f, -0.5f, 0.5f, -0.5f, // left
+    -0.5f, 0.5f, 0.5f, 0.5f, 0.5f, 0.5f, 0.5f, 0.5f, -0.5f, -0.5f, 0.5f, -0.5f      // top
+};
+static const float colors[72] = {
+    1.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f,
+    0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f,
+    0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f,
+    1.0f, 1.0f, 0.0f, 1.0f, 1.0f, 0.0f, 1.0f, 1.0f, 0.0f, 1.0f, 1.0f, 0.0f,
+    1.0f, 0.0f, 1.0f, 1.0f, 0.0f, 1.0f, 1.0f, 0.0f, 1.0f, 1.0f, 0.0f, 1.0f,
+    0.0f, 1.0f, 1.0f, 0.0f, 1.0f, 1.0f, 0.0f, 1.0f, 1.0f, 0.0f, 1.0f, 1.0f
+};
+static const unsigned int indices[36] = {
+    0,1,2,2,3,0,        // bottom
+    4,5,6,6,7,4,        // front
+    8,9,10,10,11,8,     // right
+    12,13,14,14,15,12,  // back
+    16,17,18,18,19,16,  // left
+    20,21,22,22,23,20   // top
+};
 
 /*
  * Vertex shader program
@@ -53,13 +75,13 @@ static const unsigned int indices[3] = {0,1,2};
 static const char* vertex_shader_text =
 "#version 330 core\n"
 "uniform mat4 mvp;\n"
-"in vec2 pos;\n"
+"in vec3 pos;\n"
 "in vec3 col;\n"
 "out vec3 color;\n"
 
 "void main()\n"
 "{\n"
-"    gl_Position = mvp * vec4(pos, 0.0, 1.0);\n"
+"    gl_Position = mvp * vec4(pos, 1.0);\n"
 "    color = col;\n"
 "}\n";
 
@@ -157,19 +179,19 @@ int main() {
 
     // bind vertices
     glBindBuffer(GL_ARRAY_BUFFER, vbo[0]);
-    glBufferData(GL_ARRAY_BUFFER, 6 * sizeof(float), &vertices[0], GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, 72 * sizeof(float), &vertices[0], GL_STATIC_DRAW);
     glEnableVertexAttribArray(0);
-    glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 0, 0);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
 
     // bind colors
     glBindBuffer(GL_ARRAY_BUFFER, vbo[1]);
-    glBufferData(GL_ARRAY_BUFFER, 9 * sizeof(float), &colors[0], GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, 72 * sizeof(float), &colors[0], GL_STATIC_DRAW);
     glEnableVertexAttribArray(1);
     glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, 0);
 
     // bind indices
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, vbo[2]);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, 3 * sizeof(unsigned int), &indices[0], GL_STATIC_DRAW);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, 36 * sizeof(unsigned int), &indices[0], GL_STATIC_DRAW);
     glBindVertexArray(0);
 
     // load vertex shader
@@ -202,6 +224,8 @@ int main() {
     // set uniform variables in shader after linking
     mvp_location = glGetUniformLocation(program, "mvp");
 
+    glEnable(GL_DEPTH_TEST);
+
     // start loop
     while (!glfwWindowShouldClose(window)) {
         // get width window width and height
@@ -216,18 +240,21 @@ int main() {
 
         // clear the buffer
         glClearColor(0.0f, 0.0f, 0.0f, 1.0f); // black background
-        glClear(GL_COLOR_BUFFER_BIT);
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         // add draw calls
-        glm::mat4 model = glm::rotate((float) glfwGetTime(), glm::vec3(0.0f, 1.0f, 0.0f));
-        glm::mat4 view = glm::lookAt(glm::vec3(0.0f, 0.0f, -1.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
-        glm::mat4 projection = glm::ortho(-ratio, ratio, -1.0f, 1.0f, 0.01f, 10.0f);
+        glm::mat4 scale = glm::scale(glm::vec3(1.0f, 1.0f, 1.0f));
+        glm::mat4 rotate = glm::rotate((float) glfwGetTime(), glm::vec3(1.0f, 1.0f, 1.0f));
+        glm::mat4 translate = glm::translate(glm::vec3(0.2f, 0.0f, 0.0f));
+        glm::mat4 model = translate * rotate * scale;
+        glm::mat4 view = glm::lookAt(glm::vec3(0.0f, 0.0f, 2.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+        glm::mat4 projection = glm::perspective(45.0f, ratio, 0.01f, 10.0f);
         glm::mat4 mvp = projection * view * model;
         glUseProgram(program);
         glUniformMatrix4fv(mvp_location, 1, GL_FALSE, &mvp[0][0]);
 
         glBindVertexArray(vao);
-        glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_INT, 0);
+        glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, 0);
 
         // swap buffers
         glfwSwapBuffers(window);
