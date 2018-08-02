@@ -80,8 +80,8 @@ For now, we will focus on how these Shaders are defined, compiled and executed o
 static const char* vertex_shader_text =
 "#version 330 core\n"
 "uniform mat4 mvp;\n"
-"in vec3 col;\n"
 "in vec2 pos;\n"
+"in vec3 col;\n"
 "out vec3 color;\n"
 "void main()\n"
 "{\n"
@@ -123,13 +123,29 @@ check_shader_error(fragment_shader, GL_COMPILE_STATUS, false, "Error: Shader com
 program = glCreateProgram();
 glAttachShader(program, vertex_shader);
 glAttachShader(program, fragment_shader);
+
+// bind attributes    
+glBindAttribLocation(program, 0, "pos");
+glBindAttribLocation(program, 1, "col");
+
+// always link after binding attributes
 glLinkProgram(program);
 check_shader_error(program, GL_LINK_STATUS, true, "Program linking failed: ");
 glValidateProgram(program);
 check_shader_error(program, GL_VALIDATE_STATUS, true, "Program validation failed: ");
+
+// set uniform variables in shader after linking
+mvp_location = glGetUniformLocation(program, "mvp");
 ```
 
-A shader is created using `glCreateShader`, which takes a single argument specifying the shader type (here: `GL_VERTEX_SHADER` or `GL_FRAGMENT_SHADER`, but there exist other types). Next, the source code for the Shader is set using `glShaderSource`. Then, the code is compiled using `glCompileShader` and finally we check for any errors. After compiling and checking both the vertex as well as the fragment shader, we create a single Shader program using `glCreateProgram`. The two individual shaders are attached to this program using `glAttachShader` and we link the program. We check for errors, validate the program, and check for errors again.
+A shader is created using `glCreateShader`, which takes a single argument specifying the shader type (here: `GL_VERTEX_SHADER` or `GL_FRAGMENT_SHADER`, but there exist other types). Next, the source code for the Shader is set using `glShaderSource`. Then, the code is compiled using `glCompileShader` and finally we check for any errors. After compiling and checking both the vertex as well as the fragment shader, we create a single Shader program using `glCreateProgram`. The two individual shaders are attached to this program using `glAttachShader`. The data previously specified in our VBOs needs to be connected to the shader. We do this using `glBindAttribLocation`. Then we link and validate our program and finally we set a uniform variables using `glGetUniformLocation`.
+
+Note the particular order of the instructions:
+1. Read shader sources and compile these
+2. Create a shader program and attach the shaders
+3. Bind all attributes
+4. Link and validate the shader program
+5. Get locations for the uniforms
 
 ## Exercises
 
