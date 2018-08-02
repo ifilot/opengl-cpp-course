@@ -156,7 +156,7 @@ In the previous two sections we already briefly touched upon the concept of attr
 
 In our program, we defined the attributes and uniforms using the `glBindAttribLocation` and `glGetUniformLocation` functions, respectively. For the attributes, the values were copied to the GPU using the `glBufferData` instruction. For the `mvp`-uniform, we are going to use the `glUniformMatrix4fv` function, as we are going to copy a 4x4 matrix. For other data types, other functions exists. An overview can be found [here](https://www.khronos.org/registry/OpenGL-Refpages/gl4/html/glUniform.xhtml). 
 
-The role of the `mvp` matrix is to transform the model from object space to normalized device space. We will touch upon this process in much more detail in the [next lesson](../lesson2/README.md). For the time being, it suffices to know that we constructed the `mvp` matrix in such a way that the triangle object is located on the XY-plane and the camera is at position (0.0, 0.0, 1.0), looking at the origin (0.0, 0.0, 0.0) and has its up vector pointing in the direction of the y-axis. See the image below for an schematic depiction. 
+The role of the `mvp` matrix is to transform the model from object space to clip space. We will touch upon this process in much more detail in the [next lesson](../lesson2/README.md). For the time being, it suffices to know that we constructed the `mvp` matrix in such a way that the triangle object is located on the XY-plane and the camera is at position (0.0, 0.0, 1.0), looking at the origin (0.0, 0.0, 0.0) and has its up vector pointing in the direction of the y-axis. See the image below for an schematic depiction. 
 
 ![Coordinate system](images/coordinate_system.jpg "Lesson 01 - Coordinate system")
 

@@ -43,19 +43,19 @@ Our task is to convert from object space to normalized device space by construct
 0.000000, 0.000000,  1.983984,  2.000000
 ```
 
-If we apply this matrix to the **model** coordinate (-0.5f, -0.5f, 0.5f) (lower front left vertex of the cube), we obtain the following normalized device space coordinate:
+If we apply this matrix to the **model** coordinate (-0.5f, -0.5f, 0.5f) (lower front left vertex of the cube), we obtain the following clip space coordinates:
 
 ```
 -0.672222, -0.896295, 1.482983, 1.500000
 ```
 
-Note that we are obtained a four-vector, while the model coordinate was given as a three-vector. We converted the model three-vector to four-vector by appending a 1.0. We will explain later why we do this. This normalized device space coordinate is not very intuitive, but we are almost at our final answer. The next step is to transform the normalized device coordinates four-vector to a three-vector by dividing the first three coordinates by the fourth coordinate. We then obtain:
+Note that we are obtained a four-vector, while the model coordinate was given as a three-vector. We converted the model three-vector to four-vector by appending a 1.0. We will explain later why we do this. These clip space coordinates are not very intuitive, but we are almost at our final answer. The next step is to transform to normalized device coordinates by dividing the clip space vector by its fourth coordinate. We then obtain:
 
 ```
 -0.448148, -0.597530, 0.988655, 1.000000
 ```
 
-Note that all coordinates are between [-1,1]. If the z-position is in the interval [-1,1], this means that the vertex is within the visible space of the camera. If it would be outside the interval, the vertex is not visible by the camera. Finally, we wish to know at which position the vertex will be drawn. Let us consider that our window dimensions are 640x480px. To obtain the position on the screen, we do the following:
+Note that all coordinates are between [-1,1]. This is what is meant by normalized. If the z-position is in the interval [-1,1], this means that the vertex is within the visible space of the camera. If it would be outside the interval, the vertex is not visible by the camera. Finally, we wish to know at which position the vertex will be drawn. Let us consider that our window dimensions are 640x480px. To obtain the position on the screen, we do the following:
 
 ```
 x = (ndc[0] + 1.0) / 2.0 * 640 = (-0.448148 + 1.0) / 2.0 * 640 = 177
@@ -65,6 +65,21 @@ y = (ndc[1] + 1.0) / 2.0 * 480 = (-0.597530 + 1.0) / 2.0 * 480 = 97
 This means that the lower-left-front corner of the cube will be drawn at position (177,97) with respect to the bottom-left corner of the window as can be seen from the image below.
 
 ![Pixel position](images/pixel_position.jpg "Lesson 02 - Pixel position")
+
+## Matrices and vectors
+All transformations are performed using 4x4 matrices. This means that the vectors upon which these matrices act have to be four-vectors. In the section above we simply stated that if we want to convert a three-vector representing the position, we simply have to add a 1.0. A more general rule of thumb is as follows.
+
+__Consider the four-vector `(x,y,z,w)`: If the vector represents a point in space, use `w = 1.0`. If it represents a direction, use `1w = 0.0`.__
+
+The beauty of this representation is that if we apply a translation matrix to a direction, nothing would happen (i.e. the direction would be the same). However, the operation would result in the expected behavior for a point.
+
+The following matrices are common transformations in OpenGL:
+* `Model` matrix (transforms from model space to world space)
+    * `Scale` matrix
+    * `Rotation` matrix
+    * `Translation` matrix
+* `View` matrix (position and orientation of the camera; transforms from world space to eye space)
+* `Projection` matrix (can be orthogonal or perspective; transforms from eye space to clip space)
 
 ## Additional reading
 * A very good tutorial (with significant overlap with this lesson) is provided [here](http://www.opengl-tutorial.org/beginners-tutorials/tutorial-3-matrices/)
