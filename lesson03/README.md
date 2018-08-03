@@ -1,20 +1,18 @@
-# Lesson 02 : Creating a Shader class
+# Lesson 03 : Delving into Shaders
 
 ## Learning goals
-* Understand the components (uniforms and attributes) of an OpenGL Shader
-* How to compartimentalize the Shader routines in a class
+* Understand how to compartmentalize the Shader routines in a class
+* Understand how Shader programs work and how to edit them
 
 ## Compilation instructions
 ```
 mkdir build
 cd build
-cmake ..\lesson02 -G "NMake Makefiles"
+cmake ..\lesson03 -G "NMake Makefiles"
 nmake
 ```
 
 ## Running the program
 ```
-occ-lesson-02
+occ-lesson-03
 ```
-
-![Colored triangle](images/lesson02_result.jpg "Lesson 02 - Colored triangle")

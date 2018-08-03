@@ -23,7 +23,6 @@
 #include <glm/glm.hpp>
 #include <glm/gtx/transform.hpp>
 #include <string>
-#include <vector>
 
 #include "shader.h"
 
@@ -44,11 +43,33 @@ static void key_callback(GLFWwindow* window, int key, int scancode, int action, 
 }
 
 /*
- * vertices and colors
+ * define cube object
  */
-std::vector<float> vertices = {-0.6f, -0.4f, 0.6f, -0.4f, 0.f,  0.6f};
-std::vector<float> colors = {1.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 1.0f};
-std::vector<unsigned int> indices = {0,1,2};
+static const float vertices[72] =
+{
+    -0.5f, -0.5f, 0.5f, 0.5f, -0.5f, 0.5f, 0.5f, -0.5f, -0.5f, -0.5f, -0.5f, -0.5f, // bottom
+    -0.5f, -0.5f, 0.5f, 0.5f, -0.5f, 0.5f, 0.5f, 0.5f, 0.5f, -0.5f, 0.5f, 0.5f,     // front
+    0.5f, -0.5f, 0.5f, 0.5f, -0.5f, -0.5f, 0.5f, 0.5f, -0.5f, 0.5f, 0.5f, 0.5f,     // right
+    0.5f, -0.5f, -0.5f, -0.5f, -0.5f, -0.5f, -0.5f, 0.5f, -0.5f, 0.5f, 0.5f, -0.5f, // back
+    -0.5f, -0.5f, -0.5f, -0.5f, -0.5f, 0.5f, -0.5f, 0.5f, 0.5f, -0.5f, 0.5f, -0.5f, // left
+    -0.5f, 0.5f, 0.5f, 0.5f, 0.5f, 0.5f, 0.5f, 0.5f, -0.5f, -0.5f, 0.5f, -0.5f      // top
+};
+static const float colors[72] = {
+    1.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f,
+    0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f,
+    0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f,
+    1.0f, 1.0f, 0.0f, 1.0f, 1.0f, 0.0f, 1.0f, 1.0f, 0.0f, 1.0f, 1.0f, 0.0f,
+    1.0f, 0.0f, 1.0f, 1.0f, 0.0f, 1.0f, 1.0f, 0.0f, 1.0f, 1.0f, 0.0f, 1.0f,
+    0.0f, 1.0f, 1.0f, 0.0f, 1.0f, 1.0f, 0.0f, 1.0f, 1.0f, 0.0f, 1.0f, 1.0f
+};
+static const unsigned int indices[36] = {
+    0,1,2,2,3,0,        // bottom
+    4,5,6,6,7,4,        // front
+    8,9,10,10,11,8,     // right
+    12,13,14,14,15,12,  // back
+    16,17,18,18,19,16,  // left
+    20,21,22,22,23,20   // top
+};
 
 /*
  * WinMain enables us to launch a Windows application that immediately returns to the prompt
@@ -56,7 +77,7 @@ std::vector<unsigned int> indices = {0,1,2};
 int main() {
     std::cout << "Start program" << std::endl;
 
-	// create pointer to new window
+    // create pointer to new window
     GLFWwindow* window;
 
     // set error callback function
@@ -68,8 +89,10 @@ int main() {
         exit(EXIT_FAILURE);
     }
 
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 2);
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 0);
+    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+    glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
 
     // create a new window
     window = glfwCreateWindow(640, 480, "Simple example", NULL, NULL);
@@ -101,10 +124,6 @@ int main() {
     // declare variables
     GLuint vao, vbo[3];
 
-    // build Shader
-    Shader shader("simple");
-    glLinkProgram(shader.get_id());
-
     // load shape into buffer
     glGenVertexArrays(1, &vao);
     glBindVertexArray(vao);
@@ -112,52 +131,60 @@ int main() {
 
     // bind vertices
     glBindBuffer(GL_ARRAY_BUFFER, vbo[0]);
-    glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(vertices[0]), &vertices[0], GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, 72 * sizeof(float), &vertices[0], GL_STATIC_DRAW);
     glEnableVertexAttribArray(0);
-    glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 0, 0);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
 
     // bind colors
     glBindBuffer(GL_ARRAY_BUFFER, vbo[1]);
-    glBufferData(GL_ARRAY_BUFFER, colors.size() * sizeof(colors[0]), &colors[0], GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, 72 * sizeof(float), &colors[0], GL_STATIC_DRAW);
     glEnableVertexAttribArray(1);
     glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, 0);
 
     // bind indices
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, vbo[2]);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(indices[0]), &indices[0], GL_STATIC_DRAW);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, 36 * sizeof(unsigned int), &indices[0], GL_STATIC_DRAW);
     glBindVertexArray(0);
 
-    // set uniform variables in shader
-    GLuint program = shader.get_id();
-    GLint mvp_location = glGetUniformLocation(program, "mvp");
-    glBindAttribLocation(program, 0, "pos");
-    glBindAttribLocation(program, 1, "col");
+    Shader shader("../lesson03/assets/simple");
+    shader.add_attribute("pos");
+    shader.add_attribute("col");
+    shader.build();
+    GLuint mvp_location = shader.get_uniform_location("mvp");
+
+    glEnable(GL_DEPTH_TEST);
 
     // start loop
     while (!glfwWindowShouldClose(window)) {
-    	// get width window width and height
+        // get width window width and height
         int width = 640;
         int height = 480;
-        float ratio = width / (float) height;
+
         glfwGetFramebufferSize(window, &width, &height);
+        float ratio = (float)width / (float) height;
 
         // set the viewport to match width and height
         glViewport(0, 0, width, height);
 
         // clear the buffer
-        glClearColor(0.0f, 0.0f, 0.0f, 1.0f); // white background
-        glClear(GL_COLOR_BUFFER_BIT);
+        glClearColor(0.0f, 0.0f, 0.0f, 1.0f); // black background
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-        // add draw calls
-        glm::mat4 model = glm::rotate((float) glfwGetTime(), glm::vec3(0.0f, 1.0f, 0.0f));
-        glm::mat4 view = glm::lookAt(glm::vec3(0.0f, 0.0f, -1.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
-        glm::mat4 projection = glm::ortho(-ratio, ratio, -1.0f, 1.0f, 0.01f, 10.0f);
+        // construct mvp matrix
+        glm::mat4 scale = glm::scale(glm::vec3(1.0f, 1.0f, 1.0f));
+        glm::mat4 rotate = glm::rotate((float) glfwGetTime(), glm::vec3(1.0f, 1.0f, 1.0f));
+        glm::mat4 translate = glm::translate(glm::vec3(0.0f, 0.0f, 0.0f));
+        glm::mat4 model = translate * rotate * scale;
+        glm::mat4 view = glm::lookAt(glm::vec3(0.0f, 0.0f, 2.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+        glm::mat4 projection = glm::perspective(45.0f, ratio, 0.01f, 10.0f);
         glm::mat4 mvp = projection * view * model;
+
+        // load program and copy mvp matrix
         shader.use();
         glUniformMatrix4fv(mvp_location, 1, GL_FALSE, &mvp[0][0]);
 
         glBindVertexArray(vao);
-        glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, 0);
+        glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, 0);
 
         // swap buffers
         glfwSwapBuffers(window);
