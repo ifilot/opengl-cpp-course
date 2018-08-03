@@ -2,8 +2,8 @@
 
 uniform mat4 mvp;
 
-in vec3 pos;
 in vec3 col;
+in vec3 pos;
 
 out vec3 color;
 
