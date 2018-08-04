@@ -19,7 +19,7 @@ occ-lesson-03
 
 ## Exercises
 
-To further practice with the learning goals of this lesson. A series of exercises are introduced as can be found below. Solution to these exercises are given [here](solutions.md)
+To further practice with the learning goals of this lesson. A series of exercises are introduced as can be found below. Solution to these exercises are given [here](solutions.md).
 
 ### Exercise 01: Use the position of the cube for the color
 Our cube is centered at the origin and has an edge size of 1.0. Colors are defined as three-vectors between `(0,0,0)` and `(1,1,1)`, so our cube represents the whole color space. Transfer the position variable from the vertex shader to the fragment shader and add `(0.5,0.5,0.5)` to it. Use the result for the color to obtain an image as follows.

@@ -3,6 +3,7 @@
 ## Learning goals
 * Understanding the different matrix transformations involved
 * Construct matrices using the GLM library
+* Understand the different projection and how to build these
 
 ## Compilation instructions
 ```
@@ -119,7 +120,7 @@ The perspective projection can be constructed with `glm::perspective(fovy, aspec
 There are other ways to construct the projection matrix. Have a look at the [glm matrix transformations website](https://glm.g-truc.net/0.9.4/api/a00151.html). For example, there also exists `glm::infinitePerspective` and `glm::perspectiveFov`.
 
 ## Exercises
-To further practice with the learning goals of this lesson. A series of exercises are introduced as can be found below. Solution to these exercises are given [here](solutions.md)
+To further practice with the learning goals of this lesson. A series of exercises are introduced as can be found below. Solution to these exercises are given [here](solutions.md).
 
 ### Exercise 01: Field of View
 Change the Field of View angle to 90 degrees. What happens?
@@ -130,9 +131,24 @@ Change the projection matrix to orthographic projection. What difference do you 
 ### Exercise 03: Scaling the object
 Scale the object in the y-direction as function of time. Use a function such as `sin^2(t) + 1.0f)` to get values between 1.0 and 2.0. You can use `std::sin(x)` for the sine and `std::pow(x, 2.0f)` for the square. Have a look at the reference page for the [sine](https://en.cppreference.com/w/cpp/numeric/math/sin) and for the [pow](https://en.cppreference.com/w/cpp/numeric/math/pow) function if you have trouble implementing them.
 
+### Exercise 04: Moving the camera
+Instead of rotating the object, you can also rotate the camera. Rotate the camera as function of time around the x-axis, use a function such as
+
+```
+glm::vec3 pos = glm::vec3(0.0f, std::sin((float) glfwGetTime()) * 2.0f, std::cos((float) glfwGetTime()) * 2.0f);
+```
+
+Remember that you are rotating the whole camera, so you need to update the `up` vector as well. A nice trick to do this is to define an `out` vector that specifies the view direction. In combination with a `right` vector, you can then calculate the `up` vector using the cross product as follows
+
+```
+glm::vec3 up = glm::cross(right, out);
+```
+
+This exercise is actually quite complicated, so if you cannot figure it out in one go, feel free to look at the [solutions](solutions.md#exercise-04-moving-the-camera) and try to reverse-engineer it.
+
 ## Additional reading
 * A very good tutorial (with significant overlap with this lesson) is provided [here](http://www.opengl-tutorial.org/beginners-tutorials/tutorial-3-matrices/)
-* This [tutorial]((https://learnopengl.com/Getting-started/Coordinate-Systems) on coordinate systems
+* This [tutorial](https://learnopengl.com/Getting-started/Coordinate-Systems) on coordinate systems
 * This [StackOverflow post](https://stackoverflow.com/questions/4124041/is-opengl-coordinate-system-left-handed-or-right-handed)
 * An explanation of the [mathematics behind the matrices](http://www.songho.ca/opengl/gl_projectionmatrix.html)
 * Very detailed [blog post](http://www.songho.ca/opengl/gl_projectionmatrix.html) on projection matrices

@@ -96,7 +96,7 @@ glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 
 Note that we only added a single vertex and corresponding color to the arrays and used the indices array to "recycle" two points.
 
-## Exercise 04:
+## Exercise 04: Make a tetrahedron
 
 Change the vertex arrays to:
 ```

@@ -180,7 +180,7 @@ In this first lesson, we constructed a simple OpenGL program wherein we rendered
 
 ## Exercises
 
-To further practice with the learning goals of this lesson. A series of exercises are introduced as can be found below. Solution to these exercises are given [here](solutions.md)
+To further practice with the learning goals of this lesson. A series of exercises are introduced as can be found below. Solution to these exercises are given [here](solutions.md).
 
 ### Exercise 01: Changing c-style arrays to std::vector
 On lines 46-49 of `main.cpp`, c-style vectors are being used. Change these to `std::vector`. What is the advantage of doing so? What else do you need to change in the script to let everything work accordingly? See lines 157-172.

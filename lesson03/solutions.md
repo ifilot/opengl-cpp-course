@@ -1,7 +1,7 @@
 # Solutions to exercises
 Below are the solutions to the exercises.
 
-### Exercise 01: Use the position of the cube for the color
+## Exercise 01: Use the position of the cube for the color
 Change the vertex and fragment shaders as follows
 
 ```
@@ -36,7 +36,7 @@ void main()
 }
 ```
 
-### Exercise 02: Move the cube to the right
+## Exercise 02: Move the cube to the right
 Change the vertex shader to
 ```
 #version 330 core
