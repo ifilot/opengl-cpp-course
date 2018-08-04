@@ -75,14 +75,65 @@ The beauty of this representation is that if we apply a translation matrix to a 
 
 The following matrices are common transformations in OpenGL:
 * `Model` matrix (transforms from model space to world space)
-    * `Scale` matrix
+    * `Scaling` matrix
     * `Rotation` matrix
     * `Translation` matrix
 * `View` matrix (position and orientation of the camera; transforms from world space to eye space)
 * `Projection` matrix (can be orthogonal or perspective; transforms from eye space to clip space)
+
+The order in which the above matrices have to be applied is first the model matrix, then the view matrix and finally the perspective matrix. For the model matrix, first a scaling operation, then a rotation and finally a translation should be applied. If you perform the operations in another order, you will get very interesting result. For example, what happens when you first translate the object and then rotate? The object would make an arc around the origin rather than around the objects center.
+To combine all operations into a single matrix (i.e. the `mvp`-matrix, you can multiply the matrices). Remember that the multiplication needs to be done in reverse order with respect to how these operations are applied. To construct the `mvp`-matrix, the formula would be as follows:
+
+```
+mvp = projection * view * translate * rotate * scale;
+```
+
+All matrices can be constructed using the `glm` library, which is described in further detail below. If you are interested, have a look at the [website for the library](https://glm.g-truc.net/).
+
+### Scaling matrix
+With a scaling matrix, you can increase or decrease the scale of your model. The scaling does not necessarily have to be uniformly (i.e. the same in each direction). You can for instance choose to only scale in the z-direction. The scaling matrix can be generated using `glm::scale(glm::vec3(x, y, z));` which takes as its argument a three-vector with a scaling constant for x,y, and z. If you supply 1.0 for x,y,z, you will essentially obtain the identity matrix which does nothing.
+
+### Rotation matrix
+For define a rotation, you need an rotation angle and a rotation axis. The matrix can be constructed using `glm::rotate(angle, glm::vec3(x, y, z));`, where the first argument is the angle and the second argument is the rotation axis. If you have `#define GLM_FORCE_RADIANS` at the top of you script (see [main.cpp](main.cpp)), all the angles have to be in radians.
+
+### Translation matrix
+Translation is perhaps the simplest instruction. It moves the object a specified distance in the x,y and z direction. You can build the translation matrix with `glm::translate(glm::vec3(x, y, z));`, where its first argument is a three-vector containing the distance the object should move in the x, y and z direction.
+
+### View matrix
+The view matrix deals with the orientation and position of the camera. You can for instance imagine that in a first-person shooter, you would simply change the position of the camera when you move around your character and change the cameras orientation when you look around. The view matrix takes three arguments, all three as three-vectors: `glm::lookAt(position, focus, up);`. The first argument is the position of the camera, the second argument is the focus of the camera (i.e. at which point in space the camera is looking at) and the final argument is the up direction. For example, in our script, we have chosen the positive y-direction to be the up-direction.
+
+### Projection matrix
+You could say that the projection matrix deals with the lens of the camera. There are two kind of projections: perspective and orthographic. Using orthographic projection means everything will be projected to a 2D plane and objects will not be affected by the distance and/or angle from which you see them. In the perspective view, objects which are far away are smaller than those nearby. Perspective viewpoints give more information about depth and are often easier to view because you use perspective views in real life. The image below depicts the idea. Also have a look at this [website](http://www.songho.ca/opengl/gl_projectionmatrix.html) for more details.
+
+![Projections](https://i.stack.imgur.com/eZOu9.png "Lesson 02 - Projections")  
+[Image source](https://gamedev.stackexchange.com/questions/76111/open-gl-perspective-projection-vs-orthographic-projection)
+
+#### Orthographic projection
+
+The orthographic projection can be constructed using `glm::ortho(left, right, bottom, top, znear, zfar)`. Its six parameters are floats defining the boundary values. Typically, you use -1 and 1 for the `bottom` and `top` variables, respectively. For `left` and `right`, you use the aspect ratio of your viewport (i.e. in our case, that is the same as the aspect ratio as our window). The `znear` and `zfar` variables define how near and how far you can see. For example, a value of 0.1 for znear means that any object closer to the camera than 0.1 will not be drawn.
+
+#### Perspective projection
+The perspective projection can be constructed with `glm::perspective(fovy, aspect, near, far);`. The first parameter gives the field of view angle. The angle is defined in radians if you have set `#define GLM_FORCE_RADIANS`. In our script, we have used a field of view angle of 45 degrees (pi/4 in radians). Note that the glm library has [handy functions](https://glm.g-truc.net/0.9.4/api/a00145.html) to define particular variables for us. The next argument is the aspect ratio. The third and fourth argument are the near and far boundaries, respectively. These are similar to `znear` and `zfar` for orthographic projection.
+
+#### Other projections
+There are other ways to construct the projection matrix. Have a look at the [glm matrix transformations website](https://glm.g-truc.net/0.9.4/api/a00151.html). For example, there also exists `glm::infinitePerspective` and `glm::perspectiveFov`.
+
+## Exercises
+To further practice with the learning goals of this lesson. A series of exercises are introduced as can be found below. Solution to these exercises are given [here](solutions.md)
+
+### Exercise 01: Field of View
+Change the Field of View angle to 90 degrees. What happens?
+
+### Exercise 02: Orthographic projection
+Change the projection matrix to orthographic projection. What difference do you see? What happens when you set the `left` and `right` to -1.0 and 1.0, respectively rather than the aspect ratio of the screen?
+
+### Exercise 03: Scaling the object
+Scale the object in the y-direction as function of time. Use a function such as `sin^2(t) + 1.0f)` to get values between 1.0 and 2.0. You can use `std::sin(x)` for the sine and `std::pow(x, 2.0f)` for the square. Have a look at the reference page for the [sine](https://en.cppreference.com/w/cpp/numeric/math/sin) and for the [pow](https://en.cppreference.com/w/cpp/numeric/math/pow) function if you have trouble implementing them.
 
 ## Additional reading
 * A very good tutorial (with significant overlap with this lesson) is provided [here](http://www.opengl-tutorial.org/beginners-tutorials/tutorial-3-matrices/)
 * This [tutorial]((https://learnopengl.com/Getting-started/Coordinate-Systems) on coordinate systems
 * This [StackOverflow post](https://stackoverflow.com/questions/4124041/is-opengl-coordinate-system-left-handed-or-right-handed)
 * An explanation of the [mathematics behind the matrices](http://www.songho.ca/opengl/gl_projectionmatrix.html)
+* Very detailed [blog post](http://www.songho.ca/opengl/gl_projectionmatrix.html) on projection matrices
+* [GLM library website](https://glm.g-truc.net/)

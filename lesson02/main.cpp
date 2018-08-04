@@ -43,7 +43,7 @@ static void key_callback(GLFWwindow* window, int key, int scancode, int action, 
 /*
  * define cube object
  */
-static const float vertices[72] = 
+static const float vertices[72] =
 {
     -0.5f, -0.5f, 0.5f, 0.5f, -0.5f, 0.5f, 0.5f, -0.5f, -0.5f, -0.5f, -0.5f, -0.5f, // bottom
     -0.5f, -0.5f, 0.5f, 0.5f, -0.5f, 0.5f, 0.5f, 0.5f, 0.5f, -0.5f, 0.5f, 0.5f,     // front
@@ -210,8 +210,8 @@ int main() {
     program = glCreateProgram();
     glAttachShader(program, vertex_shader);
     glAttachShader(program, fragment_shader);
-    
-    // bind attributes    
+
+    // bind attributes
     glBindAttribLocation(program, 0, "pos");
     glBindAttribLocation(program, 1, "col");
 
@@ -231,7 +231,7 @@ int main() {
         // get width window width and height
         int width = 640;
         int height = 480;
-        
+
         glfwGetFramebufferSize(window, &width, &height);
         float ratio = (float)width / (float) height;
 
@@ -248,7 +248,7 @@ int main() {
         glm::mat4 translate = glm::translate(glm::vec3(0.0f, 0.0f, 0.0f));
         glm::mat4 model = translate * rotate * scale;
         glm::mat4 view = glm::lookAt(glm::vec3(0.0f, 0.0f, 2.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
-        glm::mat4 projection = glm::perspective(45.0f, ratio, 0.01f, 10.0f);
+        glm::mat4 projection = glm::perspective(glm::quarter_pi<float>(), ratio, 0.01f, 10.0f);
         glm::mat4 mvp = projection * view * model;
 
         // load program and copy mvp matrix
