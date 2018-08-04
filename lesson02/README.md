@@ -119,6 +119,38 @@ The perspective projection can be constructed with `glm::perspective(fovy, aspec
 #### Other projections
 There are other ways to construct the projection matrix. Have a look at the [glm matrix transformations website](https://glm.g-truc.net/0.9.4/api/a00151.html). For example, there also exists `glm::infinitePerspective` and `glm::perspectiveFov`.
 
+### Reverse operations
+A special note should be made about these matrix operations. Any matrix operations is reversible. You can perform the inverse operation by taking the matrix inverse and applying this to your model. The matrix inverse can be easily calculated using `glm::inverse(mat)`. Do note that this is a relatively expensive operation.
+
+For example, let us assume you have defined a translation of +3.0 in the x direction using
+
+```
+translate = glm::translate(glm::vec3(3.0f, 0.0f, 0.0f))
+```
+
+The inverse of this matrix is generated using
+
+```
+translate_inv = glm::inverse(translate)
+```
+
+The matrix `translate_inv` would then define a translation of -3.0 in the x-direction.
+
+### Outputting matrices
+At this point you might be curious about the actual numerical values of the matrices. This can also be handy for debugging purposes. You can the numerical values to the console using 
+
+```
+std::cout << glm::to_string(mat) << std::endl;
+```
+
+Do not that you have to use 
+
+```
+#include <glm/gtx/string_cast.hpp>
+```
+
+at the top of your script. See [this page](https://glm.g-truc.net/0.9.4/api/a00205.html) for more information. There is a minor problem with this procedure. Since we are generating these matrices in a loop, you would output the matrix values every iteration and flood your console. You can resolve this by either using some flag to check whether the matrix has already been printed or exit the program after the first iteration.
+
 ## Exercises
 To further practice with the learning goals of this lesson. A series of exercises are introduced as can be found below. Solution to these exercises are given [here](solutions.md).
 

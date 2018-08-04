@@ -21,6 +21,8 @@ glm::mat4 scale = glm::scale(glm::vec3(1.0f, std::pow((float)std::sin(glfwGetTim
 ```
 
 ## Exercise 04: Moving the camera
+The looking direction `out` is the negative of the normalized position and the `right` vector is in the direction of the positive x-axis. Make a drawing for yourself if you do not see this immediately. The resulting script would be:
+
 ```
 glm::mat4 scale = glm::scale(glm::vec3(1.0f, 1.0f, 1.0f));
 glm::mat4 rotate = glm::rotate((float) glfwGetTime(), glm::vec3(1.0f, 1.0f, 1.0f));
@@ -34,3 +36,11 @@ glm::mat4 view = glm::lookAt(pos, glm::vec3(0,0,0), up);
 glm::mat4 projection = glm::perspective(glm::quarter_pi<float>(), ratio, 0.01f, 10.0f);
 glm::mat4 mvp = projection * view * model;
 ```
+
+Instead of explicitly defining the `out` vector, you could also immediately calculate it from the `pos` vector as follows
+
+```
+glm::vec3 out = glm::normalize(pos) * -1.0f;
+```
+
+Please note that the above is not a general solution. The reason it works is because our object is centered at the origin.
