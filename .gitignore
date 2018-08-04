@@ -58,5 +58,5 @@ ipch/
 
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs
-vendor/
 !vendor/download_dep.py
+vendor/*
