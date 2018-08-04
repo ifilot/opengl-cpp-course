@@ -60,3 +60,5 @@ ipch/
 *.userprefs
 !vendor/download_dep.py
 vendor/*
+.blend1
+.blend2
