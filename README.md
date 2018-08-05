@@ -15,6 +15,8 @@ Feedback on this course is always much appreciated if provided in a constructive
 1. [Compiling and running an OpenGL program](lesson01/README.md)
 2. [Model, View, Perspective](lesson02/README.md)
 3. [Creating a Shader class](lesson03/README.md)
+4. [Models](lesson04/README.md)
+5. [Lighting](lesson05/README.md)
 
 ## Prerequisite software
 In order to compile the software, you need to download and install the following packages.

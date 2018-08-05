@@ -95,7 +95,7 @@ int main() {
     glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
 
     // create a new window
-    window = glfwCreateWindow(640, 480, "Simple example", NULL, NULL);
+    window = glfwCreateWindow(640, 480, "Lesson 03", NULL, NULL);
 
     // check if the window was succesfully created
     if (!window) {

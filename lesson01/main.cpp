@@ -120,7 +120,7 @@ int main() {
     glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
 
     // create a new window
-    window = glfwCreateWindow(640, 480, "Simple example", NULL, NULL);
+    window = glfwCreateWindow(640, 480, "Lesson 01", NULL, NULL);
 
     // check if the window was succesfully created
     if (!window) {
@@ -188,8 +188,8 @@ int main() {
     program = glCreateProgram();
     glAttachShader(program, vertex_shader);
     glAttachShader(program, fragment_shader);
-    
-    // bind attributes    
+
+    // bind attributes
     glBindAttribLocation(program, 0, "pos");
     glBindAttribLocation(program, 1, "col");
 
@@ -207,7 +207,7 @@ int main() {
         // get width window width and height
         int width = 640;
         int height = 480;
-        
+
         glfwGetFramebufferSize(window, &width, &height);
         float ratio = (float)width / (float) height;
 

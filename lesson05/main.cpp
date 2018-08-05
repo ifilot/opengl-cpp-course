@@ -27,7 +27,7 @@
 #include "shader.h"
 #include "model.h"
 
-static const std::string lesson_id = "lesson04";
+static const std::string lesson_id = "lesson05";
 
 /*
  * execute this function is an error is encountered
@@ -69,7 +69,7 @@ int main() {
     glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
 
     // create a new window
-    window = glfwCreateWindow(640, 480, "Lesson 04", NULL, NULL);
+    window = glfwCreateWindow(640, 480, "Lesson 05", NULL, NULL);
 
     // check if the window was succesfully created
     if (!window) {
@@ -96,16 +96,28 @@ int main() {
     glfwSwapInterval(1);
 
     // load object
-    Model monkey("../" + lesson_id + "/assets/models/monkey.obj");
+    Model monkey("../"+ lesson_id + "/assets/models/monkey.obj");
 
     // load shader
-    Shader shader("../" + lesson_id + "/assets/shaders/normal_projection");
-    shader.add_attribute("pos");
+    Shader shader("../"+ lesson_id + "/assets/shaders/phong");
+    shader.add_attribute("position");
     shader.add_attribute("normal");
     shader.build();
 
     // set uniform variables
     GLuint mvp_location = shader.get_uniform_location("mvp");
+    GLuint model_location = shader.get_uniform_location("model");
+    GLuint view_location = shader.get_uniform_location("view");
+    GLuint color_location = shader.get_uniform_location("color");
+    GLuint lightcolor_location = shader.get_uniform_location("lightcolor");
+    GLuint lightpos_location = shader.get_uniform_location("lightpos");
+    GLuint camera_location = shader.get_uniform_location("camerapos");
+
+    // set object color and position of camera
+    shader.use();
+    glUniform3f(lightcolor_location, 1.0f, 1.0f, 1.0f);
+    glUniform3f(color_location, 1.0f, 1.0f, 1.0f);
+    glUniform3f(lightpos_location, 0.0f, -5.0f, 0.0f);
 
     glEnable(GL_DEPTH_TEST);
 
@@ -125,18 +137,28 @@ int main() {
         glClearColor(0.0f, 0.0f, 0.0f, 1.0f); // black background
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-        // construct mvp matrix
+        // model matrix
         glm::mat4 scale = glm::scale(glm::vec3(1.0f, 1.0f, 1.0f));
         glm::mat4 rotate = glm::rotate((float) glfwGetTime(), glm::vec3(0.0f, 0.0f, 1.0f));
         glm::mat4 translate = glm::translate(glm::vec3(0.0f, 0.0f, 0.0f));
         glm::mat4 model = translate * rotate * scale;
-        glm::mat4 view = glm::lookAt(glm::vec3(0.0f, -3.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 1.0f));
+
+        // view
+        glm::vec3 camerapos = glm::vec3(0.0f, -3.0f, 0.0f);
+        glm::mat4 view = glm::lookAt(camerapos, glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 1.0f));
+
+        // projection
         glm::mat4 projection = glm::perspective(45.0f, ratio, 0.01f, 10.0f);
+
+        // construct mvp matrix
         glm::mat4 mvp = projection * view * model;
 
-        // load program and copy mvp matrix
+        // load program and copy uniform variables
         shader.use();
+        glUniform3fv(camera_location, 1, &camerapos[0]);
         glUniformMatrix4fv(mvp_location, 1, GL_FALSE, &mvp[0][0]);
+        glUniformMatrix4fv(model_location, 1, GL_FALSE, &model[0][0]);
+        glUniformMatrix4fv(view_location, 1, GL_FALSE, &view[0][0]);
 
         // draw monkey
         monkey.draw();
