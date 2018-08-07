@@ -45,3 +45,13 @@ cd build
 cmake ..\lessonXX -G "NMake Makefiles"
 nmake
 ```
+
+## Troubleshooting
+
+### Framerate is very low
+This is most likely caused by VSync issues. Disable the following line:
+
+```
+// set swap interval
+glfwSwapInterval(1);
+```

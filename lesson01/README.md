@@ -52,13 +52,13 @@ The data is already defined in our C++ program in the form of three arrays. The 
 ```
 // bind vertices
 glBindBuffer(GL_ARRAY_BUFFER, vbo[0]);
-glBufferData(GL_ARRAY_BUFFER, 6 * sizeof(float) * 3, &vertices[0], GL_STATIC_DRAW);
+glBufferData(GL_ARRAY_BUFFER, 6 * sizeof(float), &vertices[0], GL_STATIC_DRAW);
 glEnableVertexAttribArray(0);
 glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 0, 0);
 
 // bind colors
 glBindBuffer(GL_ARRAY_BUFFER, vbo[1]);
-glBufferData(GL_ARRAY_BUFFER, 9 * sizeof(float) * 3, &colors[0], GL_STATIC_DRAW);
+glBufferData(GL_ARRAY_BUFFER, 9 * sizeof(float), &colors[0], GL_STATIC_DRAW);
 glEnableVertexAttribArray(1);
 glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, 0);
 
