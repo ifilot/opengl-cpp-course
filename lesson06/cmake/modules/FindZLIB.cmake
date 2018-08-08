@@ -20,7 +20,7 @@ ELSE(EXISTS ZLIB_INCLUDE_DIRS)
         ../vendor/zlib-1.2.1-win-x64/include
     )
 
-    FIND_LIBRARY(ZLIB_LIBRARY zlib
+    FIND_LIBRARY(ZLIB_LIBRARIES zlib
         HINTS ${ZLIB_INCLUDE_DIRS}/../lib
     )
 
@@ -34,8 +34,8 @@ ELSE(EXISTS ZLIB_INCLUDE_DIRS)
       message(STATUS "Could not find ZLIB include dir")
     endif()
 
-    if(ZLIB_LIBRARY)
-      message(STATUS "Found ZLIB library: ${ZLIB_LIBRARY}")
+    if(ZLIB_LIBRARIES)
+      message(STATUS "Found ZLIB library: ${ZLIB_LIBRARIES}")
     else()
       message(STATUS "Could not find ZLIB library")
     endif()

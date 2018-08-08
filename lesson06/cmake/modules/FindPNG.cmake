@@ -20,7 +20,7 @@ ELSE(EXISTS PNG_INCLUDE_DIRS)
         ../vendor/libpng-1.6.28-win-x64/include
     )
 
-    FIND_LIBRARY(PNG_LIBRARY libpng
+    FIND_LIBRARY(PNG_LIBRARIES libpng
         HINTS ${PNG_INCLUDE_DIRS}/../lib
     )
 
@@ -34,8 +34,8 @@ ELSE(EXISTS PNG_INCLUDE_DIRS)
       message(STATUS "Could not find PNG include dir")
     endif()
 
-    if(PNG_LIBRARY)
-      message(STATUS "Found PNG library: ${PNG_LIBRARY}")
+    if(PNG_LIBRARIES)
+      message(STATUS "Found PNG library: ${PNG_LIBRARIES}")
     else()
       message(STATUS "Could not find PNG library")
     endif()

@@ -13,7 +13,13 @@ if(NOT CMAKE_BUILD_TYPE AND NOT CMAKE_CONFIGURATION_TYPES)
 endif()
 
 # set directory to boost
+if(WIN32)
 SET(BOOST_ROOT "../vendor/boost-1.64.0-win-x64")
+else()
+add_definitions(-DEIGEN_NO_DEBUG -Wno-literal-suffix)
+SET(BOOST_INCLUDEDIR "/usr/include")
+SET(BOOST_LIBRARYDIR "/usr/lib/x86_64-linux-gnu")
+endif()
 
 # set Boost
 set (Boost_NO_SYSTEM_PATHS ON)
@@ -26,10 +32,17 @@ set (BOOST_ALL_DYN_LINK OFF)
 find_package(OpenGL REQUIRED)
 find_package(Boost COMPONENTS chrono regex system serialization filesystem log thread REQUIRED)
 find_package(GLFW3 REQUIRED)
+if(WIN32)
 find_package(GLEW REQUIRED)
 find_package(GLM REQUIRED)
 find_package(PNG REQUIRED)
 find_package(ZLIB REQUIRED)
+else()
+find_package(PkgConfig REQUIRED)
+pkg_check_modules(GLEW REQUIRED glew)
+pkg_check_modules(GLFW3 REQUIRED glfw3)
+pkg_check_modules(PNG REQUIRED libpng)
+endif()
 
 # Set include folders
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}
@@ -48,13 +61,13 @@ add_executable(occ-lesson06 ${SOURCES})
 
 # Link libraries
 target_link_libraries(occ-lesson06
-    ${GLFW3_LIBRARY}
+    ${GLFW3_LIBRARIES}
     ${OPENGL_glu_LIBRARY}
     ${OPENGL_gl_LIBRARY}
     ${Boost_LIBRARIES}
-    ${GLEW_LIBRARY}
-    ${PNG_LIBRARY}
-    ${ZLIB_LIBRARY})
+    ${GLEW_LIBRARIES}
+    ${PNG_LIBRARIES}
+    ${ZLIB_LIBRARIES})
 
 # add Boost definition
 add_definitions(-DBOOST_LOG_DYN_LINK)

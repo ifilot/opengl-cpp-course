@@ -20,7 +20,7 @@ ELSE(EXISTS GLFW3_INCLUDE_DIRS)
         ../vendor/glfw-3.2.1-win-x64/include
     )
 
-    FIND_LIBRARY(GLFW3_LIBRARY glfw3
+    FIND_LIBRARY(GLFW3_LIBRARIES glfw3
         HINTS ${GLFW3_INCLUDE_DIRS}/../lib
     )
 
@@ -34,8 +34,8 @@ ELSE(EXISTS GLFW3_INCLUDE_DIRS)
       message(STATUS "Could not find GLFW3 include dir")
     endif()
 
-    if(GLFW3_LIBRARY)
-      message(STATUS "Found GLFW3 library: ${GLFW3_LIBRARY}")
+    if(GLFW3_LIBRARIES)
+      message(STATUS "Found GLFW3 library: ${GLFW3_LIBRARIES}")
     else()
       message(STATUS "Could not find GLFW3 library")
     endif()

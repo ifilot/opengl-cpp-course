@@ -20,7 +20,7 @@ ELSE(EXISTS GLEW_INCLUDE_DIRS)
         ../vendor/glew-2.0.0-win-x64/include
     )
 
-    FIND_LIBRARY(GLEW_LIBRARY glew32s
+    FIND_LIBRARY(GLEW_LIBRARIES glew32s
         HINTS ${GLEW_INCLUDE_DIRS}/../lib
     )
 
@@ -34,8 +34,8 @@ ELSE(EXISTS GLEW_INCLUDE_DIRS)
       message(STATUS "Could not find GLEW include dir")
     endif()
 
-    if(GLEW_LIBRARY)
-      message(STATUS "Found GLEW library: ${GLEW_LIBRARY}")
+    if(GLEW_LIBRARIES)
+      message(STATUS "Found GLEW library: ${GLEW_LIBRARIES}")
     else()
       message(STATUS "Could not find GLEW library")
     endif()

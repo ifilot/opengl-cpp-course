@@ -7,7 +7,7 @@ This repository contains the source code for the OpenGL C++ course. The course t
 
 We assume that the student is relatively comfortable reading C++ code and has some previous experience with it. The exercises are constructed in such a way that the student only has to change a few lines of code. Furthermore, we expect that the reader is familiar with matrix-vector multiplication and has some understanding of mathematics. Finally, we expect that the user is a bit familiar using the Windows command prompt.
 
-This course focuses on running OpenGL in a Windows environment. In principle, OpenGL and the libraries we are using are cross-platform and thus work on Windows, Mac OS X as well as Linux. Nevertheless, tackling all the different platforms in a single course makes the code bulky and explaining the differences between the operating systems only adds to the complexity.
+This course focuses on running OpenGL in a Windows environment, although it should also run under Linux (we have tested it for Linux Debian). If you want to compile the programs on Linux, please read [below](#compilation-instructions-for-linux) as the instructions for CMake differ slightly. OpenGL and the libraries we are using are cross-platform and thus work on Windows, Mac OS X as well as Linux.
 
 Feedback on this course is always much appreciated if provided in a constructive manner. Feel free to use the Issues system on Github for this purpose.
 
@@ -36,7 +36,7 @@ In order to compile the software, you need to download and install the following
 
 You can easily download these dependencies by double-clicking on `download_dep.py` in the `vendor` folder. This might take a while though!
 
-## Compilation instructions
+## Compilation instructions for Windows
 Open the `Native x64 Native Tools Command Prompt` and go to the repository root folder.
 
 Create a build directory and execute CMake; note that you need to change `XX` to the lesson of interest.
@@ -46,6 +46,16 @@ mkdir build
 cd build
 cmake ..\lessonXX -G "NMake Makefiles"
 nmake
+```
+
+## Compilation instructions for Linux
+Open a terminal, go to the root folder of the repository and use the following commands.
+
+```
+mkdir build
+cd build
+cmake ..\lessonXX
+make -j5
 ```
 
 ## Troubleshooting
