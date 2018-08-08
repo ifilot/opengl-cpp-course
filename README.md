@@ -17,13 +17,15 @@ Feedback on this course is always much appreciated if provided in a constructive
 3. [Creating a Shader class](lesson03/README.md)
 4. [Models](lesson04/README.md)
 5. [Lighting](lesson05/README.md)
+6. [Textures](lesson06/README.md)
+7. [Diffuse and specular maps](lesson07/README.md)
 
 ## Prerequisite software
 In order to compile the software, you need to download and install the following packages.
 
-* [CMake](https://cmake.org/download/) - During the installation, you need to **add cmake to the $PATH**. Do not forget to tag the corresponding box.
-* [Microsoft Visual Studio Community Edition](https://visualstudio.microsoft.com/downloads/) - Use the 2017 version
-* [Git](https://git-scm.com/download/win)
+* [CMake](https://cmake.org/download/) - During the installation, you need to select **Add CMAKE to the system PATH for all users**.
+* [Microsoft Visual Studio Community Edition](https://visualstudio.microsoft.com/downloads/) - Use the 2017 version. Under 'Workloads', you only need to select 'Desktop Development with C++'
+* [Git](https://git-scm.com/download/win) - You can use the default settings during the installation procedure.
 * [Python](https://www.python.org/downloads/) - Use the latest Python 2 version!
 
 ## Dependencies
