@@ -17,6 +17,8 @@ nmake
 occ-lesson-05
 ```
 
+If the compilation is not working or if the program shows weird behavior, please check the [troubleshooting section](../README.md#troubleshooting).
+
 ![Phong lighting](images/lesson05_phong_lighting.jpg "Lesson 05 - Phong lighting")
 
 ## The Phong Model

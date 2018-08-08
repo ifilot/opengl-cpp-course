@@ -1,6 +1,6 @@
 # set minimum cmake requirements
 cmake_minimum_required(VERSION 2.8)
-project (occ-lesson04)
+project (occ-lesson06)
 
 # add custom directory to look for .cmake files
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_SOURCE_DIR}/cmake/modules )
@@ -28,7 +28,8 @@ find_package(Boost COMPONENTS chrono regex system serialization filesystem log t
 find_package(GLFW3 REQUIRED)
 find_package(GLEW REQUIRED)
 find_package(GLM REQUIRED)
-
+find_package(PNG REQUIRED)
+find_package(ZLIB REQUIRED)
 
 # Set include folders
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}
@@ -37,19 +38,23 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}
                     ${GLEW_INCLUDE_DIRS}
                     ${GLUT_INCLUDE_DIRS}
                     ${GLM_INCLUDE_DIRS}
-                    ${GLFW3_INCLUDE_DIRS})
+                    ${GLFW3_INCLUDE_DIRS}
+                    ${PNG_INCLUDE_DIRS}
+                    ${ZLIB_INCLUDE_DIRS})
 
 # Add sources
 file(GLOB_RECURSE SOURCES "*.cpp")
-add_executable(occ-lesson04 ${SOURCES})
+add_executable(occ-lesson06 ${SOURCES})
 
 # Link libraries
-target_link_libraries(occ-lesson04
+target_link_libraries(occ-lesson06
     ${GLFW3_LIBRARY}
     ${OPENGL_glu_LIBRARY}
     ${OPENGL_gl_LIBRARY}
     ${Boost_LIBRARIES}
-    ${GLEW_LIBRARY})
+    ${GLEW_LIBRARY}
+    ${PNG_LIBRARY}
+    ${ZLIB_LIBRARY})
 
 # add Boost definition
 add_definitions(-DBOOST_LOG_DYN_LINK)
@@ -60,4 +65,4 @@ set(CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS}")
 ###
 # Installing
 ##
-install (TARGETS occ-lesson04 DESTINATION bin)
+install (TARGETS occ-lesson06 DESTINATION bin)

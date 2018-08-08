@@ -176,7 +176,7 @@ int main() {
         glm::mat4 translate = glm::translate(glm::vec3(0.0f, 0.0f, 0.0f));
         glm::mat4 model = translate * rotate * scale;
         glm::mat4 view = glm::lookAt(glm::vec3(0.0f, 0.0f, 2.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
-        glm::mat4 projection = glm::perspective(45.0f, ratio, 0.01f, 10.0f);
+        glm::mat4 projection = glm::perspective(glm::quarter_pi<float>(), ratio, 0.01f, 10.0f);
         glm::mat4 mvp = projection * view * model;
 
         // load program and copy mvp matrix

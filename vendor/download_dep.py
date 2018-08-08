@@ -10,7 +10,7 @@
 #
 
 # put here a list of all libraries which have to be present
-libraries = ['boost-1.64.0', 'glew-2.0.0', 'glfw-3.2.1', 'glm-0.9.8.4']
+libraries = ['boost-1.64.0', 'glew-2.0.0', 'glfw-3.2.1', 'glm-0.9.8.4', 'libpng-1.6.28', 'zlib-1.2.1']
 
 # establish path
 import os 		# os functions

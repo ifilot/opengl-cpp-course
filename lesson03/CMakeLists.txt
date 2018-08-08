@@ -13,7 +13,7 @@ if(NOT CMAKE_BUILD_TYPE AND NOT CMAKE_CONFIGURATION_TYPES)
 endif()
 
 # set directory to boost
-SET(BOOST_ROOT "../../../Libraries/boost-1.64.0-win-x64")
+SET(BOOST_ROOT "../vendor/boost-1.64.0-win-x64")
 
 # set Boost
 set (Boost_NO_SYSTEM_PATHS ON)

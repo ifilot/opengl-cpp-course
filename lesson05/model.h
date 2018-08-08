@@ -38,15 +38,35 @@ private:
     GLuint vbo[3];
 
 public:
+    
+    /**
+     * @brief      Construct model object
+     *
+     * @param[in]  path  Path to object file
+     */
     Model(const std::string& path);
 
+    /**
+     * @brief      Draw the model
+     */
     void draw();
 
+    /**
+     * @brief      Load the VAO of the model
+     */
     void load();
 
+    /**
+     * @brief      Destroys the object.
+     */
     ~Model();
 
 private:
+    /**
+     * @brief      Load object data from hard drive
+     *
+     * @param[in]  path  Path to object file
+     */
     void load_data(const std::string& path);
 };
 

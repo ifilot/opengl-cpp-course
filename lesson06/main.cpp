@@ -26,8 +26,9 @@
 
 #include "shader.h"
 #include "model.h"
+#include "texture_factory.h"
 
-static const std::string lesson_id = "lesson05";
+static const std::string lesson_id = "lesson06";
 
 /*
  * execute this function is an error is encountered
@@ -69,7 +70,7 @@ int main() {
     glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
 
     // create a new window
-    window = glfwCreateWindow(640, 480, "Lesson 05", NULL, NULL);
+    window = glfwCreateWindow(640, 480, "Lesson 06", NULL, NULL);
 
     // check if the window was succesfully created
     if (!window) {
@@ -96,12 +97,16 @@ int main() {
     glfwSwapInterval(1);
 
     // load object
-    Model monkey("../"+ lesson_id + "/assets/models/monkey.obj");
+    Model cube("../"+ lesson_id + "/assets/models/cube.obj");
+
+    // load texture factory
+    TextureFactory texture_factory;
 
     // load shader
     Shader shader("../"+ lesson_id + "/assets/shaders/phong");
     shader.add_attribute("position");
     shader.add_attribute("normal");
+    shader.add_attribute("uv");
     shader.build();
 
     // set uniform variables
@@ -112,6 +117,7 @@ int main() {
     GLuint lightcolor_location = shader.get_uniform_location("lightcolor");
     GLuint lightpos_location = shader.get_uniform_location("lightpos");
     GLuint camera_location = shader.get_uniform_location("camerapos");
+    GLuint textureid_location = shader.get_uniform_location("textureid");
 
     // set object color and position of camera
     shader.use();
@@ -138,8 +144,8 @@ int main() {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         // model matrix
-        glm::mat4 scale = glm::scale(glm::vec3(1.0f, 1.0f, 1.0f));
-        glm::mat4 rotate = glm::rotate((float) glfwGetTime(), glm::vec3(0.0f, 0.0f, 1.0f));
+        glm::mat4 scale = glm::scale(glm::vec3(0.5f, 0.5f, 0.5f));
+        glm::mat4 rotate = glm::rotate((float) glfwGetTime(), glm::vec3(1.0f, 1.0f, 1.0f));
         glm::mat4 translate = glm::translate(glm::vec3(0.0f, 0.0f, 0.0f));
         glm::mat4 model = translate * rotate * scale;
 
@@ -160,8 +166,12 @@ int main() {
         glUniformMatrix4fv(model_location, 1, GL_FALSE, &model[0][0]);
         glUniformMatrix4fv(view_location, 1, GL_FALSE, &view[0][0]);
 
-        // draw monkey
-        monkey.draw();
+        // bind texture
+        glBindTexture(GL_TEXTURE_2D, texture_factory.get_texture("../"+ lesson_id + "/assets/textures/uvgrid.png"));
+        glUniform1ui(textureid_location, 0);
+
+        // draw cube
+        cube.draw();
 
         // swap buffers
         glfwSwapBuffers(window);

@@ -39,7 +39,7 @@ void Model::load() {
  * @brief      Destroys the object.
  */
 Model::~Model() {
-    glDeleteBuffers(3, this->vbo);
+    glDeleteBuffers(4, this->vbo);
     glDeleteVertexArrays(1, &this->vao);
 }
 
@@ -55,13 +55,16 @@ void Model::load_data(const std::string& path) {
         // set regex patterns
         static const boost::regex v_line("v\\s+([0-9.-]+)\\s+([0-9.-]+)\\s+([0-9.-]+).*");
         static const boost::regex vn_line("vn\\s+([0-9.-]+)\\s+([0-9.-]+)\\s+([0-9.-]+).*");
-        static const boost::regex f_line("f\\s+([0-9]+)\\/\\/([0-9]+)\\s+([0-9]+)\\/\\/([0-9]+)\\s+([0-9]+)\\/\\/([0-9]+).*");
+        static const boost::regex vt_line("vt\\s+([0-9.-]+)\\s+([0-9.-]+).*");
+        static const boost::regex f_line("f\\s+([0-9]+)\\/([0-9]+)\\/([0-9]+)\\s+([0-9]+)\\/([0-9]+)\\/([0-9]+)\\s+([0-9]+)\\/([0-9]+)\\/([0-9]+).*");
 
         // construct holders
         std::vector<glm::vec3> _positions;
         std::vector<glm::vec3> _normals;
+        std::vector<glm::vec2> _uvs;
         std::vector<unsigned int> position_indices;
         std::vector<unsigned int> normal_indices;
+        std::vector<unsigned int> uv_indices;
 
         std::string line;
 
@@ -88,14 +91,24 @@ void Model::load_data(const std::string& path) {
                 _normals.push_back(normal);
             }
 
+            if (boost::regex_match(line, what1, vt_line)) {
+                glm::vec2 uv(boost::lexical_cast<float>(what1[1]),
+                             boost::lexical_cast<float>(what1[2]));
+                _uvs.push_back(uv);
+            }
+
             if (boost::regex_match(line, what1, f_line)) {
                 position_indices.push_back(boost::lexical_cast<unsigned int>(what1[1]) - 1);
-                position_indices.push_back(boost::lexical_cast<unsigned int>(what1[3]) - 1);
-                position_indices.push_back(boost::lexical_cast<unsigned int>(what1[5]) - 1);
+                position_indices.push_back(boost::lexical_cast<unsigned int>(what1[4]) - 1);
+                position_indices.push_back(boost::lexical_cast<unsigned int>(what1[7]) - 1);
 
-                normal_indices.push_back(boost::lexical_cast<unsigned int>(what1[2]) - 1);
-                normal_indices.push_back(boost::lexical_cast<unsigned int>(what1[4]) - 1);
+                uv_indices.push_back(boost::lexical_cast<unsigned int>(what1[2]) - 1);
+                uv_indices.push_back(boost::lexical_cast<unsigned int>(what1[5]) - 1);
+                uv_indices.push_back(boost::lexical_cast<unsigned int>(what1[8]) - 1);
+
+                normal_indices.push_back(boost::lexical_cast<unsigned int>(what1[3]) - 1);
                 normal_indices.push_back(boost::lexical_cast<unsigned int>(what1[6]) - 1);
+                normal_indices.push_back(boost::lexical_cast<unsigned int>(what1[9]) - 1);
             }
         }
 
@@ -103,6 +116,7 @@ void Model::load_data(const std::string& path) {
         for(unsigned int i=0; i<position_indices.size(); i++) {
             this->positions.push_back(_positions[position_indices[i]]);
             this->normals.push_back(_normals[normal_indices[i]]);
+            this->uvs.push_back(_uvs[uv_indices[i]]);
             this->indices.push_back(i);
         }
 
@@ -111,7 +125,7 @@ void Model::load_data(const std::string& path) {
         // load into buffer
         glGenVertexArrays(1, &this->vao);
         glBindVertexArray(this->vao);
-        glGenBuffers(3, this->vbo);
+        glGenBuffers(4, this->vbo);
 
         // bind vertices
         glBindBuffer(GL_ARRAY_BUFFER, this->vbo[0]);
@@ -125,11 +139,18 @@ void Model::load_data(const std::string& path) {
         glEnableVertexAttribArray(1);
         glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, 0);
 
+        // bind uvs
+        glBindBuffer(GL_ARRAY_BUFFER, this->vbo[2]);
+        glBufferData(GL_ARRAY_BUFFER, this->uvs.size() * 2 * sizeof(float), &this->uvs[0][0], GL_STATIC_DRAW);
+        glEnableVertexAttribArray(2);
+        glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 0, 0);
+
         // bind indices
-        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, this->vbo[2]);
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, this->vbo[3]);
         glBufferData(GL_ELEMENT_ARRAY_BUFFER, this->indices.size() * sizeof(unsigned int), &this->indices[0], GL_STATIC_DRAW);
         glBindVertexArray(0);
     } else {
         std::cerr << "Cannot open file " + path << std::endl;
+        exit(-1);
     }
 }

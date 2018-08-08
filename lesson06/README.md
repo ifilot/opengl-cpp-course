@@ -14,3 +14,5 @@ nmake
 ```
 occ-lesson-06
 ```
+
+If the compilation is not working or if the program shows weird behavior, please check the [troubleshooting section](../README.md#troubleshooting).

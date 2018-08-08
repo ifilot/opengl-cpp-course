@@ -17,6 +17,8 @@ nmake
 occ-lesson-04
 ```
 
+If the compilation is not working or if the program shows weird behavior, please check the [troubleshooting section](../README.md#troubleshooting).
+
 ![Normal projection](images/lesson04_normal_projection.jpg "Lesson 04 - Normal projection")
 
 ## Loading models

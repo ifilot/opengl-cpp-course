@@ -32,10 +32,11 @@ class Model {
 private:
     std::vector<glm::vec3> positions;
     std::vector<glm::vec3> normals;
+    std::vector<glm::vec2> uvs;
     std::vector<unsigned int> indices;
 
     GLuint vao;
-    GLuint vbo[3];
+    GLuint vbo[4];
 
 public:
     

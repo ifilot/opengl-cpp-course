@@ -141,6 +141,7 @@ std::string Shader::load_shader_code(const std::string& path) {
         }
     } else {
         std::cerr << "Unable to load shader: " << path << std::endl;
+        exit(-1);
     }
 
     return output;

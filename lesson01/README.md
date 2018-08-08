@@ -16,6 +16,8 @@ cmake ..\lesson01 -G "NMake Makefiles"
 nmake
 ```
 
+If the compilation is not working or if the program shows weird behavior, please check the [troubleshooting section](../README.md#troubleshooting).
+
 ## Running the program
 ```
 occ-lesson-01

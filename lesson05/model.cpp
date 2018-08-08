@@ -11,23 +11,43 @@
 
 #include "model.h"
 
+/**
+ * @brief      Construct model object
+ *
+ * @param[in]  path  Path to object file
+ */
 Model::Model(const std::string& path) {
     this->load_data(path);
 }
 
+/**
+ * @brief      Draw the model
+ */
 void Model::draw() {
     this->load();
     glDrawElements(GL_TRIANGLES, (GLsizei)this->indices.size(), GL_UNSIGNED_INT, 0);
 }
 
+/**
+ * @brief      Load the VAO of the model
+ */
 void Model::load() {
     glBindVertexArray(this->vao);
 }
 
+/**
+ * @brief      Destroys the object.
+ */
 Model::~Model() {
-
+    glDeleteBuffers(3, this->vbo);
+    glDeleteVertexArrays(1, &this->vao);
 }
 
+/**
+ * @brief      Load object data from hard drive
+ *
+ * @param[in]  path  Path to object file
+ */
 void Model::load_data(const std::string& path) {
     std::ifstream file(path);
 
@@ -86,7 +106,7 @@ void Model::load_data(const std::string& path) {
             this->indices.push_back(i);
         }
 
-        std::cout << "Loaded " + path + ", which contains " << this->indices.size() << " faces." << std::endl;
+        std::cout << "Loaded " + path + ", which contains " << this->indices.size() / 3 << " faces." << std::endl;
 
         // load into buffer
         glGenVertexArrays(1, &this->vao);
@@ -110,7 +130,6 @@ void Model::load_data(const std::string& path) {
         glBufferData(GL_ELEMENT_ARRAY_BUFFER, this->indices.size() * sizeof(unsigned int), &this->indices[0], GL_STATIC_DRAW);
         glBindVertexArray(0);
     } else {
-        throw std::runtime_error("Cannot open file: " + path);
+        std::cerr << "Cannot open file " + path << std::endl;
     }
-
 }

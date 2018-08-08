@@ -18,6 +18,8 @@ nmake
 occ-lesson-02
 ```
 
+If the compilation is not working or if the program shows weird behavior, please check the [troubleshooting section](../README.md#troubleshooting).
+
 ## The model
 In this lesson, we are going to focus on the different matrix operations that are applied to a model in order to render it on the screen. In the [previous lesson](../lesson01/README.md), we used a flat triangle as our model. In this lesson, we are going to use a cube where each face of the cube has a different color. The cube is rotated around the (1,1,1) axes as shown by the image below
 
