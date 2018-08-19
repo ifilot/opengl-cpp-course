@@ -19,6 +19,12 @@ occ-lesson-03
 
 If the compilation is not working or if the program shows weird behavior, please check the [troubleshooting section](../README.md#troubleshooting).
 
+## Explanation
+In this short lesson, we have extracted the Shader routines from `main.cpp` and placed these in a class. The advantages of this are
+
+* All the Shader logic is compartmentalized and could be reused without too much difficulty in another program by simply copying the source code to a new project.
+* The Shader code is now loaded from two files on the hard drive, meaning that when we only change the Shader code, we do not have to recompile the program, but just reload the program as the Shaders are compiled upon execution of the program anyway.
+
 ## Exercises
 
 To further practice with the learning goals of this lesson. A series of exercises are introduced as can be found below. Solution to these exercises are given [here](solutions.md).
