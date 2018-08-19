@@ -61,7 +61,9 @@ make -j5
 ## Troubleshooting
 
 ### Framerate is very low
-This is most likely caused by VSync issues. Disable the following line:
+If you are working with Intel Integrated Graphics, open the Intel (U)HD Graphics Control Panel. Go to `3D` and add the executable to the `Select Application` window using the `Browse` button. Then under `Vertical Sync`, select `Use Driver Settings`.
+
+Alternatively, try disabling the following line:
 
 ```
 // set swap interval
