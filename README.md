@@ -25,7 +25,7 @@ In order to compile the software, you need to download and install the following
 * [CMake](https://cmake.org/download/) - During the installation, you need to select **Add CMAKE to the system PATH for all users**.
 * [Microsoft Visual Studio Community Edition](https://visualstudio.microsoft.com/downloads/) - Use the 2017 version. Under 'Workloads', you only need to select 'Desktop Development with C++'
 * [Git](https://git-scm.com/download/win) - You can use the default settings during the installation procedure.
-* [Python](https://www.python.org/downloads/) - Use the latest Python 2 version!
+* [Python](https://www.python.org/downloads/) - Use the latest Python 3 version!
 
 ## Dependencies
 * GLFW
