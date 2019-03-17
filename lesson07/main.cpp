@@ -138,8 +138,8 @@ int main() {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         // convergence plane
-        const float dist = 4.0f;
-        const float eye_sep = dist / 30.0f;
+        static const float dist = 4.0f;
+        static const float eye_sep = dist / 30.0f; // rule of thumb: intra-ocular separation should be distance to convergence plane divided by 30
         glm::vec3 camera_pos_ctr = glm::vec3(0.0f, -3.0f, 0.0f);
 
         // model matrix
@@ -148,7 +148,7 @@ int main() {
         glm::mat4 translate = glm::translate(glm::vec3(0.0f, 0.0f, 0.0f));
         glm::mat4 model = translate * rotate * scale;
 
-        // view
+        // view - automatically calculate camera settings using distance and intra-ocular separation
         glm::vec3 camerapos1 = camera_pos_ctr - glm::vec3(eye_sep / 2.0f, 0.0f, 0.0f);
         glm::vec3 camerapos2= camera_pos_ctr + glm::vec3(eye_sep / 2.0f, 0.0f, 0.0f);
         glm::mat4 view1 = glm::lookAt(camerapos1, camera_pos_ctr + glm::vec3(0.0f, dist, 0.0f), glm::vec3(0.0f, 0.0f, 1.0f));
@@ -166,8 +166,10 @@ int main() {
 
         glUniformMatrix4fv(model_location, 1, GL_FALSE, &model[0][0]);
 
+        // perform two rendering calls (one for each eye); assume red/cyan anaglyph stereographics
+
         // left eye
-        glColorMask(true, false, false, false);
+        glColorMask(true, false, false, false); // place left eye data on red channel
         glUniform3fv(camera_location, 1, &camerapos1[0]);
         glUniformMatrix4fv(mvp_location, 1, GL_FALSE, &mvp1[0][0]);
         glUniformMatrix4fv(view_location, 1, GL_FALSE, &view1[0][0]);
@@ -176,7 +178,7 @@ int main() {
         glClear(GL_DEPTH_BUFFER_BIT);
 
         // right eye
-        glColorMask(false, true, true, false);
+        glColorMask(false, true, true, false); // place right eye data on blue and green channels (= cyan)
         glUniform3fv(camera_location, 1, &camerapos2[0]);
         glUniformMatrix4fv(mvp_location, 1, GL_FALSE, &mvp2[0][0]);
         glUniformMatrix4fv(view_location, 1, GL_FALSE, &view2[0][0]);
