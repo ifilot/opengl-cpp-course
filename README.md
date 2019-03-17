@@ -18,6 +18,7 @@ Feedback on this course is always much appreciated if provided in a constructive
 4. [Models](lesson04/README.md)
 5. [Lighting](lesson05/README.md)
 6. [Textures](lesson06/README.md)
+7. [Anaglyph](lesson07/README.md)
 
 ## Prerequisite software
 In order to compile the software, you need to download and install the following packages.
