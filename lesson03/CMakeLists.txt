@@ -14,7 +14,7 @@ endif()
 
 # set directory to boost
 if(WIN32)
-SET(BOOST_ROOT "../vendor/boost-1.64.0-win-x64")
+SET(BOOST_ROOT "../vendor/boost-1.74.0-win-x64")
 else()
 add_definitions(-DEIGEN_NO_DEBUG -Wno-literal-suffix)
 SET(BOOST_INCLUDEDIR "/usr/include")
@@ -26,6 +26,7 @@ set (Boost_USE_MULTITHREADED ON)
 set (Boost_USE_STATIC_LIBS ON)
 set (Boost_USE_STATIC_RUNTIME OFF)
 set (BOOST_ALL_DYN_LINK OFF)
+set (Boost_NO_BOOST_CMAKE ON)
 
 # Include libraries
 find_package(OpenGL REQUIRED)
