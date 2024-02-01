@@ -62,3 +62,4 @@ ipch/
 vendor/*
 *.blend1
 *.blend2
+build*/
