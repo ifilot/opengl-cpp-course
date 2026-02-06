@@ -22,6 +22,7 @@ jobs:
             libglfw3-dev \
             libglm-dev \
             libgl1-mesa-dev \
+            libpng-dev \
             libx11-dev \
             libxi-dev \
             libxrandr-dev \
