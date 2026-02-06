@@ -5,11 +5,12 @@
 * Understand vertex normals
 
 ## Compilation instructions
+Build from the repository root in a MinGW-w64 shell.
+
 ```
 mkdir build
-cd build
-cmake ..\lesson04 -G "NMake Makefiles"
-nmake
+cmake -S lesson04 -B build/lesson04 -G "MinGW Makefiles"
+cmake --build build/lesson04
 ```
 
 ## Explanation

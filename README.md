@@ -1,16 +1,33 @@
 # OpenGL C++ Course
 
 **Update**
-I made some changes to the code by which everything should now work for MSVC 2019 using Boost 1.74.0.
+The build instructions below now target MinGW-w64 (via MSYS2) instead of MSVC.
 
 ## Purpose and expectations
-This repository contains the source code for the OpenGL C++ course. The course teaches students how to effectively use C++ in conjunction with OpenGL to build graphical programs. The course is made in a concise manner and we refer often to external resources which we expect the student to read (or at least glance through). The learning strategy employed here is "Learning by example" and "Learning by doing". This means that example code is provided and the student is given the opportunity to practice with the material in the form of exercises.
+This repository contains the source code for the OpenGL C++ course. The course
+teaches students how to effectively use C++ in conjunction with OpenGL to build
+graphical programs. The course is made in a concise manner and I refer often to
+external resources which I expect the student to read (or at least glance
+through). The learning strategy employed here is "Learning by example" and
+"Learning by doing". This means that example code is provided and the student is
+given the opportunity to practice with the material in the form of exercises.
 
-We assume that the student is relatively comfortable reading C++ code and has some previous experience with it. The exercises are constructed in such a way that the student only has to change a few lines of code. Furthermore, we expect that the reader is familiar with matrix-vector multiplication and has some understanding of mathematics. Finally, we expect that the user is a bit familiar using the Windows command prompt.
+We assume that the student is relatively comfortable reading C++ code and has
+some previous experience with it. The exercises are constructed in such a way
+that the student only has to change a few lines of code. Furthermore, we expect
+that the student is familiar with matrix-vector multiplication and has some
+understanding of matrix mathematics. Finally, we expect that the student is a
+bit familiar using the command line.
 
-This course focuses on running OpenGL in a Windows environment, although it should also run under Linux (we have tested it for Linux Debian). If you want to compile the programs on Linux, please read [below](#compilation-instructions-for-linux) as the instructions for CMake differ slightly. OpenGL and the libraries we are using are cross-platform and thus work on Windows, Mac OS X as well as Linux.
+This course focuses on running OpenGL in a Windows environment using MinGW-w64,
+although it should also run under Linux (I have tested it for Linux Ubuntu). If
+you want to compile the programs on Linux, please read
+[below](#compilation-instructions-for-linux) as the instructions for CMake
+differ slightly. OpenGL and the libraries we are using are cross-platform and
+thus work on Windows, Mac as well as Linux.
 
-Feedback on this course is always much appreciated if provided in a constructive manner. Feel free to use the Issues system on Github for this purpose.
+Feedback on this course is always much appreciated if provided in a constructive
+manner. Feel free to use the Issues system on Github for this purpose.
 
 ## Lesson overview
 1. [Compiling and running an OpenGL program](lesson01/README.md)
@@ -21,32 +38,30 @@ Feedback on this course is always much appreciated if provided in a constructive
 6. [Textures](lesson06/README.md)
 7. [Anaglyph](lesson07/README.md)
 
-## Prerequisite software
-In order to compile the software, you need to download and install the following packages.
+## Preparation of compilation environment
 
-* [CMake](https://cmake.org/download/) - During the installation, you need to select **Add CMAKE to the system PATH for all users**.
-* [Microsoft Visual Studio Community Edition](https://visualstudio.microsoft.com/downloads/) - Use the 2019 version. Under 'Workloads', you only need to select 'Desktop Development with C++'
-* [Git](https://git-scm.com/download/win) - You can use the default settings during the installation procedure.
-* [Python](https://www.python.org/downloads/) - Use the latest Python 3 version!
+In order to compile the software under Windows, install the the MinGW-w64
+toolchain via [MSYS2](https://www.msys2.org/). Next, open **MSYS2 MinGW 64-bit**
+and install using `pacman` the dependencies using the following instruction
 
-## Dependencies
-* GLFW
-* Boost
-* Glew
-* GLM
+```bash
+pacman -S --needed \
+  mingw-w64-x86_64-toolchain \
+  mingw-w64-x86_64-cmake \
+  mingw-w64-x86_64-glew \
+  mingw-w64-x86_64-glfw \
+  mingw-w64-x86_64-glm
+```
 
-You can easily download these dependencies by double-clicking on `download_dep.py` in the `vendor` folder. This might take a while though! Especially the compiled Boost libraries are relatively big (~300MB).
-
-## Compilation instructions for Windows
-Open the `Native x64 Native Tools Command Prompt` and go to the repository root folder.
+## Compilation instructions for Windows (MinGW-w64)
+Open the **MSYS2 MinGW 64-bit** shell and go to the repository root folder.
 
 Create a build directory and execute CMake; note that you need to change `XX` to the lesson of interest.
 
 ```
 mkdir build
-cd build
-cmake ..\lessonXX -G "NMake Makefiles"
-nmake
+cmake -S lessonXX -B build/lessonXX -G "MinGW Makefiles"
+cmake --build build/lessonXX
 ```
 
 ## Compilation instructions for Linux
@@ -54,9 +69,8 @@ Open a terminal, go to the root folder of the repository and use the following c
 
 ```
 mkdir build
-cd build
-cmake ..\lessonXX
-make -j5
+cmake -S lessonXX -B build/lessonXX
+cmake --build build/lessonXX -j5
 ```
 
 ## Troubleshooting

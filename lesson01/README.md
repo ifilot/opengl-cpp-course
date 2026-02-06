@@ -9,11 +9,12 @@
 * Conceptually understanding attributes and uniforms
 
 ## Compilation instructions
+Build from the repository root in a MinGW-w64 shell.
+
 ```
 mkdir build
-cd build
-cmake ..\lesson01 -G "NMake Makefiles"
-nmake
+cmake -S lesson01 -B build/lesson01 -G "MinGW Makefiles"
+cmake --build build/lesson01
 ```
 
 If the compilation is not working or if the program shows weird behavior, please check the [troubleshooting section](../README.md#troubleshooting).

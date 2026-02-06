@@ -21,10 +21,7 @@
     #define GLEW_STATIC
 #endif
 #include <GL/glew.h>
-#include <boost/format.hpp>
-#include <boost/regex.hpp>
-#include <boost/lexical_cast.hpp>
-#include <boost/algorithm/string.hpp>
+#include <regex>
 #include <glm/glm.hpp>
 #include <glm/gtx/transform.hpp>
 

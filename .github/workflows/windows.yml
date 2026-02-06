@@ -1,0 +1,33 @@
+name: windows-build
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  build:
+    runs-on: windows-latest
+    defaults:
+      run:
+        shell: msys2 {0}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up MSYS2 (MinGW-w64)
+        uses: msys2/setup-msys2@v2
+        with:
+          msystem: MINGW64
+          update: true
+          install: >-
+            mingw-w64-x86_64-toolchain
+            mingw-w64-x86_64-cmake
+            mingw-w64-x86_64-glew
+            mingw-w64-x86_64-glfw
+            mingw-w64-x86_64-glm
+
+      - name: Configure and build lessons
+        run: |
+          set -euo pipefail
+          cmake -S . -B build -G "MinGW Makefiles"
+          cmake --build build

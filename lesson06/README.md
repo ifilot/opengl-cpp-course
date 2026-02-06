@@ -3,11 +3,12 @@
 ## Learning goals
 
 ## Compilation instructions
+Build from the repository root in a MinGW-w64 shell.
+
 ```
 mkdir build
-cd build
-cmake ..\lesson06 -G "NMake Makefiles"
-nmake
+cmake -S lesson06 -B build/lesson06 -G "MinGW Makefiles"
+cmake --build build/lesson06
 ```
 
 ## Running the program

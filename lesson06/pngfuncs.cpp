@@ -10,6 +10,7 @@
  **************************************************************************/
 
 #include "pngfuncs.h"
+#include <cstdint>
 
 void PNG::write_image_buffer_to_png(const std::string& filename, const std::vector<uint8_t>& buffer, unsigned int width, unsigned int height, unsigned int col) {
     png_structp png_ptr;
