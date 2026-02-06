@@ -5,11 +5,12 @@
 * Using Phong Shader
 
 ## Compilation instructions
+Build from the repository root in a MinGW-w64 shell.
+
 ```
 mkdir build
-cd build
-cmake ..\lesson05 -G "NMake Makefiles"
-nmake
+cmake -S lesson05 -B build/lesson05 -G "MinGW Makefiles"
+cmake --build build/lesson05
 ```
 
 ## Running the program

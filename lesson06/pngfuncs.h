@@ -16,6 +16,7 @@
 #include <iostream>
 #include <vector>
 #include <png.h>
+#include <cstdint>
 
 namespace PNG {
 

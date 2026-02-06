@@ -53,10 +53,10 @@ void Model::load_data(const std::string& path) {
 
     if(file.is_open()) {
         // set regex patterns
-        static const boost::regex v_line("v\\s+([0-9.-]+)\\s+([0-9.-]+)\\s+([0-9.-]+).*");
-        static const boost::regex vn_line("vn\\s+([0-9.-]+)\\s+([0-9.-]+)\\s+([0-9.-]+).*");
-        static const boost::regex vt_line("vt\\s+([0-9.-]+)\\s+([0-9.-]+).*");
-        static const boost::regex f_line("f\\s+([0-9]+)\\/([0-9]+)\\/([0-9]+)\\s+([0-9]+)\\/([0-9]+)\\/([0-9]+)\\s+([0-9]+)\\/([0-9]+)\\/([0-9]+).*");
+        static const std::regex v_line("v\\s+([0-9.-]+)\\s+([0-9.-]+)\\s+([0-9.-]+).*");
+        static const std::regex vn_line("vn\\s+([0-9.-]+)\\s+([0-9.-]+)\\s+([0-9.-]+).*");
+        static const std::regex vt_line("vt\\s+([0-9.-]+)\\s+([0-9.-]+).*");
+        static const std::regex f_line("f\\s+([0-9]+)\\/([0-9]+)\\/([0-9]+)\\s+([0-9]+)\\/([0-9]+)\\/([0-9]+)\\s+([0-9]+)\\/([0-9]+)\\/([0-9]+).*");
 
         // construct holders
         std::vector<glm::vec3> _positions;
@@ -75,40 +75,40 @@ void Model::load_data(const std::string& path) {
 
         // start reading
         while(std::getline(file, line)) {
-             boost::smatch what1;
+             std::smatch what1;
 
-            if (boost::regex_match(line, what1, v_line)) {
-                glm::vec3 pos(boost::lexical_cast<float>(what1[1]),
-                              boost::lexical_cast<float>(what1[2]),
-                              boost::lexical_cast<float>(what1[3]));
+            if (std::regex_match(line, what1, v_line)) {
+                glm::vec3 pos(std::stof(what1[1]),
+                              std::stof(what1[2]),
+                              std::stof(what1[3]));
                 _positions.push_back(pos);
             }
 
-            if (boost::regex_match(line, what1, vn_line)) {
-                glm::vec3 normal(boost::lexical_cast<float>(what1[1]),
-                                 boost::lexical_cast<float>(what1[2]),
-                                 boost::lexical_cast<float>(what1[3]));
+            if (std::regex_match(line, what1, vn_line)) {
+                glm::vec3 normal(std::stof(what1[1]),
+                                 std::stof(what1[2]),
+                                 std::stof(what1[3]));
                 _normals.push_back(normal);
             }
 
-            if (boost::regex_match(line, what1, vt_line)) {
-                glm::vec2 uv(boost::lexical_cast<float>(what1[1]),
-                             boost::lexical_cast<float>(what1[2]));
+            if (std::regex_match(line, what1, vt_line)) {
+                glm::vec2 uv(std::stof(what1[1]),
+                             std::stof(what1[2]));
                 _uvs.push_back(uv);
             }
 
-            if (boost::regex_match(line, what1, f_line)) {
-                position_indices.push_back(boost::lexical_cast<unsigned int>(what1[1]) - 1);
-                position_indices.push_back(boost::lexical_cast<unsigned int>(what1[4]) - 1);
-                position_indices.push_back(boost::lexical_cast<unsigned int>(what1[7]) - 1);
+            if (std::regex_match(line, what1, f_line)) {
+                position_indices.push_back(static_cast<unsigned int>(std::stoul(what1[1])) - 1);
+                position_indices.push_back(static_cast<unsigned int>(std::stoul(what1[4])) - 1);
+                position_indices.push_back(static_cast<unsigned int>(std::stoul(what1[7])) - 1);
 
-                uv_indices.push_back(boost::lexical_cast<unsigned int>(what1[2]) - 1);
-                uv_indices.push_back(boost::lexical_cast<unsigned int>(what1[5]) - 1);
-                uv_indices.push_back(boost::lexical_cast<unsigned int>(what1[8]) - 1);
+                uv_indices.push_back(static_cast<unsigned int>(std::stoul(what1[2])) - 1);
+                uv_indices.push_back(static_cast<unsigned int>(std::stoul(what1[5])) - 1);
+                uv_indices.push_back(static_cast<unsigned int>(std::stoul(what1[8])) - 1);
 
-                normal_indices.push_back(boost::lexical_cast<unsigned int>(what1[3]) - 1);
-                normal_indices.push_back(boost::lexical_cast<unsigned int>(what1[6]) - 1);
-                normal_indices.push_back(boost::lexical_cast<unsigned int>(what1[9]) - 1);
+                normal_indices.push_back(static_cast<unsigned int>(std::stoul(what1[3])) - 1);
+                normal_indices.push_back(static_cast<unsigned int>(std::stoul(what1[6])) - 1);
+                normal_indices.push_back(static_cast<unsigned int>(std::stoul(what1[9])) - 1);
             }
         }
 

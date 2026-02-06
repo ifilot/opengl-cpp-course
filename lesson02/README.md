@@ -6,11 +6,12 @@
 * Understand the different projection and how to build these
 
 ## Compilation instructions
+Build from the repository root in a MinGW-w64 shell.
+
 ```
 mkdir build
-cd build
-cmake ..\lesson02 -G "NMake Makefiles"
-nmake
+cmake -S lesson02 -B build/lesson02 -G "MinGW Makefiles"
+cmake --build build/lesson02
 ```
 
 ## Running the program

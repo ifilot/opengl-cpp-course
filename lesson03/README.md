@@ -5,11 +5,12 @@
 * Understand how Shader programs work and how to edit them
 
 ## Compilation instructions
+Build from the repository root in a MinGW-w64 shell.
+
 ```
 mkdir build
-cd build
-cmake ..\lesson03 -G "NMake Makefiles"
-nmake
+cmake -S lesson03 -B build/lesson03 -G "MinGW Makefiles"
+cmake --build build/lesson03
 ```
 
 ## Running the program

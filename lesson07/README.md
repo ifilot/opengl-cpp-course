@@ -4,11 +4,12 @@
 * Understand how anaglyph stereographic rendering works
 
 ## Compilation instructions
+Build from the repository root in a MinGW-w64 shell.
+
 ```
 mkdir build
-cd build
-cmake ..\lesson07 -G "NMake Makefiles"
-nmake
+cmake -S lesson07 -B build/lesson07 -G "MinGW Makefiles"
+cmake --build build/lesson07
 ```
 
 ## Running the program
