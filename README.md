@@ -1,5 +1,8 @@
 # OpenGL C++ Course
 
+[![windows-build](https://github.com/ifilot/opengl-cpp-course/actions/workflows/windows.yml/badge.svg)](https://github.com/ifilot/opengl-cpp-course/actions/workflows/windows.yml)
+[![linux-build](https://github.com/ifilot/opengl-cpp-course/actions/workflows/linux.yml/badge.svg)](https://github.com/ifilot/opengl-cpp-course/actions/workflows/linux.yml)
+
 **Update**
 The build instructions below now target MinGW-w64 (via MSYS2) instead of MSVC.
 
